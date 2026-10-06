@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- i18n-page tells js/i18n.js which meta block to apply, so the title,
+       description and social-share tags follow the selected language
+       instead of staying English. -->
+  <meta name="i18n-page" content="home">
+  <meta name="description" content="Product designer for B2B software: ERP modules, dashboards, internal tools and the design systems under them. Remote from Algeria (UTC+1). Arabic, French, English.">
+  <!-- JOBS SITE: kept out of search engines on purpose. It is reached by the
+       link on the CV, and must never compete with nadirdesign.com in Google. -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="author" content="Nadir Mostefaoui">
+  <meta property="og:title" content="Nadir Mostefaoui · Product Designer for B2B SaaS, ERP and Design Systems">
+  <meta property="og:description" content="Three case studies from a live ERP platform: a task app tested with real staff, a sales module, and a design system of 1,033 variables and 24 components.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="website">
+  <!-- Social preview. og:image is a real 1200x630 render of the hero, not a
+       logo card, so a shared link shows the actual page. It is deliberately
+       ONE image for all three languages: crawlers read this static head
+       before js/i18n.js runs, so a per-language swap would never be seen.
+       The URL must stay absolute — relative og:image paths are ignored. -->
+  <meta property="og:url" content="https://portfolio.nadirdesign.com/">
+  <meta property="og:image" content="https://portfolio.nadirdesign.com/assets/images/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Nadir Mostefaoui between the same title in two scripts: Product Designer in Latin and مُصَمِّم مُنتَجَات in Arabic">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://portfolio.nadirdesign.com/assets/images/og-cover.jpg">
+
+  <title>Nadir Mostefaoui · Product Designer for B2B SaaS, ERP and Design Systems</title>
+
+  <!-- Scroll position on load — three scenarios:
+
+       1. A RELOAD or BACK/FORWARD (bfcache) navigation should always land
+          back on the Hero section, ignoring any leftover history scroll
+          offset or URL hash. scrollRestoration = 'manual' plus an
+          immediate scrollTo(0, 0) handle the common case; a pageshow
+          listener is a second, later-firing pass for mobile Safari, which
+          can still nudge the scroll position back after 'load' if the
+          page's height changed since the offset was first recorded (e.g.
+          an Experience accordion item was left open).
+
+       2. A genuine INCOMING navigation carrying a URL hash — e.g. a
+          case-study page's "Experience" nav link pointing to
+          index.html#experience — must be honoured: the page should land
+          on that section, not the Hero. The hash is still stripped from
+          the address bar right away (keeps URLs clean, matches this
+          site's plain '#work'-style nav links) but the target id is
+          remembered in window.__pendingScrollTarget and applied by the
+          hero-entrance trigger at the end of <body>, once the hero has
+          been released.
+
+       3. Same-page anchor clicks (already on index.html, clicking
+          '#skills' etc.) never trigger a new document load, so this
+          script doesn't run again — native + CSS smooth-scrolling just
+          works on its own.
+
+       The Navigation Timing API tells scenarios 1 and 2 apart: only a
+       'navigate' entry (a fresh link/URL, not a reload or back/forward)
+       with a hash counts as an incoming section link. -->
+  <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
+    var navType = 'navigate';
+    if (performance.getEntriesByType && performance.getEntriesByType('navigation').length) {
+      navType = performance.getEntriesByType('navigation')[0].type;
+    } else if (performance.navigation) {
+      navType = ['navigate', 'reload', 'back_forward'][performance.navigation.type] || 'navigate';
+    }
+
+    var isIncomingSectionLink = (navType === 'navigate' && !!location.hash);
+    if (isIncomingSectionLink) {
+      window.__pendingScrollTarget = location.hash.slice(1);
+    }
+
+    if (location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+    window.scrollTo(0, 0);
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted || !isIncomingSectionLink) {
+        window.scrollTo(0, 0);
+      }
+    });
+  </script>
+
+  <!-- Favicon — swapped per language by the pre-paint script below and
+       live by js/i18n.js's switchLang() (both target this id) . -->
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" id="favicon-link">
+
+  <!-- Preload critical assets -->
+  <link rel="preload" href="assets/images/profile.jpg" as="image">
+
+  <!-- Fonts — a real <link> here (not the @import that used to live inside
+       style.css) so the browser's HTML preloader discovers and starts
+       fetching it immediately, in parallel with everything else in <head>.
+       @import is only discovered after style.css itself has been fully
+       fetched and parsed, adding a serial round-trip that delayed text
+       rendering on first, cold-cache visits. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- JOBS SITE: every style that does not exist on nadirdesign.com lives in
+       this one file, so style.css can stay an untouched copy of the main
+       site's. -->
+  <link rel="stylesheet" href="css/jobs.css">
+
+  <!-- Apply theme before paint — prevents flash. Defaults to light mode
+       for first-time visitors regardless of OS/browser color-scheme
+       preference; only an explicit saved choice overrides it. -->
+  <script>
+    (function(){
+      const t = localStorage.getItem('nadir-theme');
+      document.documentElement.setAttribute('data-theme', t || 'light');
+    })();
+  </script>
+
+  <!-- Apply language/direction before paint — prevents a flash of the wrong
+       direction and of the wrong-script nav name (js/i18n.js's own
+       switchLang() only runs on DOMContentLoaded, which is after first
+       paint). Key/list mirror js/i18n.js's STORAGE_KEY and RTL_LANGS
+       exactly — keep both in sync if either changes. Also swaps the favicon
+       before the browser requests it, for the same reason. -->
+  <script>
+    (function(){
+      const lang  = localStorage.getItem('nadir-lang') || 'en';
+      const isRTL = lang === 'ar';
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+
+      const favicon = document.getElementById('favicon-link');
+      if (favicon && isRTL) favicon.href = 'assets/icons/favicon-ar.svg';
+    })();
+  </script>
+</head>
+<body class="hero-pending">
+
+  <!-- Custom cursor (desktop only) -->
+  <div id="cursor-dot"  aria-hidden="true"></div>
+  <div id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- ══════════════════════
+       NAVBAR
+  ══════════════════════ -->
+  <header>
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
+      <div class="nav-inner">
+
+        <!-- Identity. Replaces the signature logo (removed 2026-08-05).
+             Deliberately just the name in the site's own typeface, with no
+             mark of any kind — nothing here is an image, so it needs no
+             light/dark asset swap and no per-language file: `nav.name`
+             carries the script. -->
+        <a href="#" class="nav-identity" id="nav-logo" aria-label="Nadir Mostefaoui: Home">
+          <!-- Two spans, not one JS-swapped string: js/i18n.js writes each
+               [data-i18n] node independently, so a single node can only ever
+               hold one key. CSS picks which is visible per breakpoint. -->
+          <span class="nav-identity-name nav-identity-name--full" data-i18n="nav.name">Nadir Mostefaoui</span>
+          <span class="nav-identity-name nav-identity-name--short" data-i18n="nav.name_short">Nadir</span>
+        </a>
+
+        <!-- Nav links -->
+        <ul class="nav-links" id="nav-links" role="list">
+          <li class="nav-item has-dropdown">
+            <div class="nav-item-row">
+              <a href="#work" class="nav-link" data-i18n="nav.projects">Work</a>
+              <button type="button" class="nav-dropdown-toggle" aria-expanded="false" aria-controls="nav-dropdown-work"
+                      aria-label="Show case studies menu" data-i18n-aria-label="nav.dropdown_aria">
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+            </div>
+            <div class="nav-dropdown" id="nav-dropdown-work">
+              <div class="nav-dropdown-inner">
+                <ul class="nav-dropdown-list" role="list">
+                  <li><a href="case-studies/task-master.html" data-i18n="work.cs2.title">Task Master · Retail Ops App</a></li>
+                  <li><a href="case-studies/iksir-design-system.html" data-i18n="work.cs5.title">Iksir Design System</a></li>
+                  <li><a href="case-studies/b2b-sales-erp.html" data-i18n="work.cs3.title">B2B Sales ERP Module</a></li>
+                  <li><a href="https://nadirdesign.notion.site/eLearning-Platform-Teacher-Side-2789267c734580818447e1667e1b8630?source=copy_link" target="_blank" rel="noopener noreferrer" data-i18n="work.cs4.title">eLearning Platform</a></li>
+                  <li class="nav-dropdown-all"><a href="#work" data-i18n="nav.all_projects">All case studies</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li><a href="#how"        class="nav-link" data-i18n="nav.how">How I work</a></li>
+          <li><a href="#experience" class="nav-link" data-i18n="nav.experience">Experience</a></li>
+          <li><a href="#skills"     class="nav-link" data-i18n="nav.skills">Skills</a></li>
+
+          <!-- Mobile-only extras -->
+          <li class="nav-mobile-status">
+            <span class="nav-status-dot" aria-hidden="true"></span>
+            <span data-i18n="footer.badge">Open to the right team</span>
+          </li>
+          <li class="nav-mobile-cta">
+            <a href="#contact" class="btn btn-dark">
+              <span data-i18n="nav.contact">Get in touch</span>
+              <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </li>
+          <li class="nav-mobile-controls">
+            <div class="lang-switcher" role="group" aria-label="Select language">
+              <button class="lang-btn" data-lang-btn="ar" aria-label="Arabic"  aria-pressed="false">ع</button>
+              <button class="lang-btn active" data-lang-btn="en" aria-label="English" aria-pressed="true">EN</button>
+              <button class="lang-btn" data-lang-btn="fr" aria-label="Français" aria-pressed="false">FR</button>
+            </div>
+            <button class="theme-toggle" data-theme-toggle aria-label="Switch theme" aria-pressed="false">
+              <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+              <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1"  x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22"  x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1"  y1="12" x2="3"  y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+              </svg>
+            </button>
+          </li>
+        </ul>
+
+        <!-- Right side -->
+        <div class="nav-end">
+          <!-- Language switcher -->
+          <div class="lang-switcher" role="group" aria-label="Select language">
+            <button class="lang-btn" data-lang-btn="ar" aria-label="Arabic"  aria-pressed="false">ع</button>
+            <button class="lang-btn active" data-lang-btn="en" aria-label="English" aria-pressed="true">EN</button>
+            <button class="lang-btn" data-lang-btn="fr" aria-label="Français" aria-pressed="false">FR</button>
+          </div>
+
+          <!-- Theme toggle -->
+          <button class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1"  x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22"  x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1"  y1="12" x2="3"  y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+            </svg>
+          </button>
+
+          <!-- CTA -->
+          <a href="#contact" class="btn btn-dark">
+            <span data-i18n="nav.contact">Get in touch</span>
+            <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <!-- Mobile hamburger -->
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span><span></span>
+        </button>
+
+      </div>
+    </nav>
+  </header>
+
+  <!-- Dim scrim behind the mobile menu pop-up — also acts as a
+       tap-anywhere-to-close target. Mobile-only (see CSS). -->
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+  <main>
+
+    <!-- ══════════════════════
+         HERO SECTION
+    ══════════════════════ -->
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+
+
+
+      <!-- Left: all content. The greeting line ("Hi, I'm Nadir Mostefaoui" with
+           a pulsing dot) was removed 2026-08-05: once the navbar started
+           showing his name, the hero repeated it a couple of hundred pixels
+           below. The section now opens straight on the display title. -->
+      <div class="hero-content">
+
+        <!-- Mobile-only grouping wrapper. display:contents on desktop so it has
+             zero effect on the existing flex layout there. -->
+        <div class="hero-bottom-group">
+
+          <!-- "Bilingual duet" display title. The ghost span renders the OTHER
+               script behind the live one (Arabic behind EN/FR, Latin behind AR)
+               as a faint background layer — it makes the Arabic/English design
+               fluency visible in the first thing a visitor sees.
+
+               This span structure MUST also be duplicated in every locale's
+               `hero.title` string in js/i18n.js: switchLang() overwrites this
+               h1 via innerHTML on every language change, so markup authored
+               only here would be destroyed on the first switch.
+
+               The ghost is aria-hidden so the h1's accessible name stays the
+               single real title, and it uses the unpointed Arabic (no tashkeel)
+               because diacritics read as noise at 9% opacity. -->
+          <h1 class="hero-title" id="hero-title" data-i18n="hero.title" data-i18n-html>
+            <span class="ht-ghost" aria-hidden="true">مصمم منتجات</span><span class="ht-main"><span class="ht-l">Product</span><span class="ht-l">Designer</span></span>
+          </h1>
+
+          <div class="hero-divider" aria-hidden="true"></div>
+
+          <!-- data-i18n-html because the string carries markup: the closing
+               availability line is wrapped in .hero-bio-sig so it sets as a
+               smaller caption with a status dot. The same markup lives in all
+               three locale strings in js/i18n.jobs.js, since switchLang()
+               overwrites this node. The copy below is the first-paint fallback. -->
+          <p class="hero-bio" data-i18n="hero.bio" data-i18n-html>I design B2B software with the people who build it: ERP modules, dashboards, internal tools, and the design systems underneath. Since 2024 I have been the only designer on a live ERP platform, working daily with business analysts, tech leads and developers.<span class="hero-bio-sig hero-open"><span class="hero-open-dot" aria-hidden="true"></span>Open to a remote product design role. Based in Tlemcen, Algeria (UTC+1).</span></p>
+
+          <!-- A visitor here usually arrives FROM the CV, so the first action
+               is the work. The CV is the second, for someone who landed here
+               some other way. -->
+          <div class="hero-actions">
+            <a href="#work" class="btn btn-dark">
+              <span data-i18n="hero.cta_primary">See my work</span>
+              <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <button type="button" class="btn btn-ghost-fill" data-cv-open>
+              <span data-i18n="hero.cta_cv">View CV</span>
+              <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+
+          <!-- Stats -->
+          <div class="hero-stats" aria-label="Quick stats">
+            <div class="stat-item">
+              <span class="stat-num" data-i18n="hero.stat2_num">2+</span>
+              <span class="stat-label" data-i18n="hero.stat2_label">Years in
+product design</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num" data-i18n="hero.stat3_num">05</span>
+              <span class="stat-label" data-i18n="hero.stat3_label">ERP modules
+designed</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Right: portrait photo card. On mobile this becomes the full-bleed
+           background for the whole hero, with .hero-content overlaid on top. -->
+      <div class="hero-portrait-wrap" aria-hidden="true">
+        <div class="portrait-card-wrapper">
+
+          <!-- Offset ghost card for depth (mobile only) -->
+          <div class="portrait-card-bg"></div>
+
+          <!-- Main card: image (+ mobile scrim, added in CSS via ::before) -->
+          <div class="portrait-card-inner">
+            <img
+              src="assets/images/profile.jpg"
+              alt=""
+              class="hero-portrait-img"
+              loading="eager"
+              fetchpriority="high"
+            >
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Scroll cue: fades out once the visitor scrolls -->
+      <a class="scroll-cue" href="#work" aria-label="Scroll to explore" data-i18n-aria-label="hero.scroll_aria">
+        <span class="scroll-cue__label" data-i18n="hero.scroll">Scroll</span>
+        <span class="scroll-cue__track" aria-hidden="true"><span class="scroll-cue__dot"></span></span>
+      </a>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         AT A GLANCE (jobs site only)
+         The four things a recruiter screens for before reading anything
+         else, set as one quiet spec row. Not a numbered section: it has no
+         .exp-label-row, so the section counter skips it.
+    ══════════════════════════════════════════════ -->
+    <section class="glance" aria-label="At a glance" data-i18n-aria-label="glance.aria">
+      <dl class="glance-grid">
+        <div class="glance-cell">
+          <dt class="glance-k" data-i18n="glance.k1">Looking for</dt>
+          <dd class="glance-v" data-i18n="glance.v1">A remote product design role</dd>
+          <dd class="glance-s" data-i18n="glance.s1">Full-time or contract</dd>
+        </div>
+        <div class="glance-cell">
+          <dt class="glance-k" data-i18n="glance.k2">Based in</dt>
+          <dd class="glance-v" data-i18n="glance.v2">Tlemcen, Algeria · UTC+1</dd>
+          <dd class="glance-s" data-i18n="glance.s2">The full European working day, and US East Coast mornings</dd>
+        </div>
+        <div class="glance-cell">
+          <dt class="glance-k" data-i18n="glance.k3">Languages</dt>
+          <dd class="glance-v" data-i18n="glance.v3">Arabic, French, English</dd>
+          <dd class="glance-s" data-i18n="glance.s3">I design in right-to-left and left-to-right</dd>
+        </div>
+        <div class="glance-cell">
+          <dt class="glance-k" data-i18n="glance.k4">Remote since</dt>
+          <dd class="glance-v" data-i18n="glance.v4">2024</dd>
+          <dd class="glance-s" data-i18n="glance.s4">With teams in France and the UAE</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         WORK / CASE STUDIES SECTION
+    ══════════════════════════════════════════════ -->
+    <section id="work" class="work-section" aria-labelledby="work-title">
+      <div class="work-container">
+
+        <div class="exp-header">
+          <div class="exp-label-row">
+            <span class="exp-label-line" aria-hidden="true"></span>
+            <span class="exp-label-text" data-i18n="work.label">SELECTED WORK</span>
+          </div>
+          <div class="exp-title-row">
+            <h2 class="exp-title" id="work-title" data-i18n="work.title">Case Studies</h2>
+            <p class="exp-subtitle" data-i18n="work.subtitle">Three projects from one ERP platform, plus one in e-learning. Each shows my part and what changed.</p>
+          </div>
+        </div>
+
+        <div class="work-explorer">
+
+          <div class="work-tablist" role="tablist" aria-orientation="vertical" aria-label="Case studies">
+            <div class="work-tab-item">
+              <button class="work-tab" role="tab" id="work-tab-2" aria-selected="true" aria-controls="work-panel-2" tabindex="0" data-index="0">
+                <span class="work-tab-num" aria-hidden="true">01</span>
+                <span class="work-tab-info">
+                  <span class="work-tab-company" data-i18n="work.cs2.title">Task Master · Retail Ops App</span>
+                  <span class="work-tab-short" data-i18n="work.cs2.short">Task Master</span>
+                  <span class="work-tab-hook" data-i18n="work.cs2.hook">Retail Operations App</span>
+                </span>
+              </button>
+              <a class="work-tab-open" href="case-studies/task-master.html" data-i18n-aria-label="work.open_aria" aria-label="Open case study">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                <span data-i18n="work.open_label">Open</span>
+              </a>
+            </div>
+            <div class="work-tab-item">
+              <button class="work-tab" role="tab" id="work-tab-5" aria-selected="false" aria-controls="work-panel-5" tabindex="-1" data-index="1">
+                <span class="work-tab-num" aria-hidden="true">02</span>
+                <span class="work-tab-info">
+                  <span class="work-tab-company" data-i18n="work.cs5.title">Iksir Design System</span>
+                  <span class="work-tab-short" data-i18n="work.cs5.short">Design System</span>
+                  <span class="work-tab-hook" data-i18n="work.cs5.hook">Design System</span>
+                </span>
+              </button>
+              <a class="work-tab-open" href="case-studies/iksir-design-system.html" data-i18n-aria-label="work.open_aria" aria-label="Open case study">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                <span data-i18n="work.open_label">Open</span>
+              </a>
+            </div>
+            <div class="work-tab-item">
+              <button class="work-tab" role="tab" id="work-tab-3" aria-selected="false" aria-controls="work-panel-3" tabindex="-1" data-index="2">
+                <span class="work-tab-num" aria-hidden="true">03</span>
+                <span class="work-tab-info">
+                  <span class="work-tab-company" data-i18n="work.cs3.title">B2B Sales ERP Module</span>
+                  <span class="work-tab-short" data-i18n="work.cs3.short">Sales ERP</span>
+                  <span class="work-tab-hook" data-i18n="work.cs3.hook">B2B Sales ERP Module</span>
+                </span>
+              </button>
+              <a class="work-tab-open" href="case-studies/b2b-sales-erp.html" data-i18n-aria-label="work.open_aria" aria-label="Open case study">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                <span data-i18n="work.open_label">Open</span>
+              </a>
+            </div>
+            <div class="work-tab-item">
+              <button class="work-tab" role="tab" id="work-tab-4" aria-selected="false" aria-controls="work-panel-4" tabindex="-1" data-index="3">
+                <span class="work-tab-num" aria-hidden="true">04</span>
+                <span class="work-tab-info">
+                  <span class="work-tab-company" data-i18n="work.cs4.title">eLearning Platform</span>
+                  <span class="work-tab-short" data-i18n="work.cs4.short">eLearning</span>
+                  <span class="work-tab-hook" data-i18n="work.cs4.hook">eLearning Platform</span>
+                </span>
+              </button>
+              <a class="work-tab-open" href="https://nadirdesign.notion.site/eLearning-Platform-Teacher-Side-2789267c734580818447e1667e1b8630?source=copy_link" target="_blank" rel="noopener noreferrer" data-i18n-aria-label="work.open_aria" aria-label="Open case study">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                <span data-i18n="work.open_label">Open</span>
+              </a>
+            </div>
+            <span class="work-tab-indicator" aria-hidden="true"></span>
+          </div>
+
+          <div class="work-panels">
+
+            <!-- ── CS2: Task Management App ── -->
+            <article class="work-panel is-active" role="tabpanel" id="work-panel-2" aria-labelledby="work-tab-2" tabindex="0">
+              <span class="work-panel-ghost-num" aria-hidden="true">01</span>
+              <div class="work-panel-top">
+                <span class="work-panel-tag" data-i18n="work.cs2.tag">Retail Operations · Mobile-First</span>
+                <span class="work-panel-nda">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                  <span data-i18n="work.nda">NDA: specifics generalized, no confidential data shown</span>
+                </span>
+              </div>
+              <h3 class="work-panel-title" data-i18n="work.cs2.title">Task Master · Retail Ops App</h3>
+              <p class="work-panel-meta" data-i18n="work.cs2.role">Sole designer, with a business analyst, a tech lead and the developers</p>
+
+              <div class="work-panel-flow">
+                <div class="work-flow-step">
+                  <span class="work-flow-label" data-i18n="work.flow_problem">Problem</span>
+                  <p data-i18n="work.cs2.problem">Store operations (purchasing, inventory, stock corrections, shelf labelling) scattered across spreadsheets and disconnected tools.</p>
+                </div>
+                <svg class="work-flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="work-flow-step">
+                  <span class="work-flow-label" data-i18n="work.flow_approach">Approach</span>
+                  <p data-i18n="work.cs2.approach">Unified six workflows into one task model (List → Details → Execution), built the design system under it, and iterated with real supermarket users across mobile, tablet, and desktop.</p>
+                </div>
+                <svg class="work-flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="work-flow-step work-flow-step--outcome">
+                  <span class="work-flow-label" data-i18n="work.flow_outcome">Outcome</span>
+                  <p data-i18n="work.cs2.outcome">50% faster inventory task execution, fewer stock-correction errors, and the visual benchmark for Datamaster's ERP suite.</p>
+                </div>
+              </div>
+
+              <div class="work-panel-stats">
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="50">0</span><span class="work-stat-suffix">%</span></span>
+                  <span class="work-stat-label" data-i18n="work.cs2.stat1_label">faster inventory task execution</span>
+                </div>
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="6">0</span><span class="work-stat-suffix"></span></span>
+                  <span class="work-stat-label" data-i18n="work.cs2.stat2_label">workflows unified</span>
+                </div>
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="390">0</span><span class="work-stat-suffix">+</span></span>
+                  <span class="work-stat-label" data-i18n="work.cs2.stat3_label">screens, 3 breakpoints</span>
+                </div>
+              </div>
+
+              <div class="work-panel-tags">
+                <span class="exp-tag" data-i18n="work.cs2.tag1">Mobile-First</span>
+                <span class="exp-tag" data-i18n="work.cs2.tag2">User Flows</span>
+                <span class="exp-tag" data-i18n="work.cs2.tag3">Usability Testing</span>
+              </div>
+
+              <a class="btn btn-dark work-panel-cta" href="case-studies/task-master.html">
+                <span data-i18n="work.cta">View Case Study</span>
+                <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </article>
+
+            <!-- ── CS5: Iksir Design System ── -->
+            <article class="work-panel" role="tabpanel" id="work-panel-5" aria-labelledby="work-tab-5" tabindex="0" hidden>
+              <span class="work-panel-ghost-num" aria-hidden="true">02</span>
+              <div class="work-panel-top">
+                <span class="work-panel-tag" data-i18n="work.cs5.tag">ERP · Design System</span>
+                <span class="work-panel-nda">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                  <span data-i18n="work.nda">NDA: specifics generalized, no confidential data shown</span>
+                </span>
+              </div>
+              <h3 class="work-panel-title" data-i18n="work.cs5.title">Iksir Design System</h3>
+              <p class="work-panel-meta" data-i18n="work.cs5.role">Led the project, with a second designer</p>
+
+              <div class="work-panel-flow">
+                <div class="work-flow-step">
+                  <span class="work-flow-label" data-i18n="work.flow_problem">Problem</span>
+                  <p data-i18n="work.cs5.problem">A growing ERP and mobile suite with no shared UI language: inconsistent components, slow builds, and no accessibility or trilingual foundation.</p>
+                </div>
+                <svg class="work-flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="work-flow-step">
+                  <span class="work-flow-label" data-i18n="work.flow_approach">Approach</span>
+                  <p data-i18n="work.cs5.approach">Led a token-first design system (a three-layer token architecture, accessibility baked in, a trilingual (LTR/RTL) foundation, and the entire mobile layer), documented for dev handoff.</p>
+                </div>
+                <svg class="work-flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="work-flow-step work-flow-step--outcome">
+                  <span class="work-flow-label" data-i18n="work.flow_outcome">Outcome</span>
+                  <p data-i18n="work.cs5.outcome">Shipped V1, and the team now designs and builds against it: one source of truth across web and mobile, with light/dark and RTL handled automatically.</p>
+                </div>
+              </div>
+
+              <div class="work-panel-stats">
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="1033">0</span><span class="work-stat-suffix"></span></span>
+                  <span class="work-stat-label" data-i18n="work.cs5.stat1_label">design variables</span>
+                </div>
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="24">0</span><span class="work-stat-suffix"></span></span>
+                  <span class="work-stat-label" data-i18n="work.cs5.stat2_label">components shipped</span>
+                </div>
+              </div>
+
+              <div class="work-panel-tags">
+                <span class="exp-tag" data-i18n="work.cs5.tag1">Design Systems</span>
+                <span class="exp-tag" data-i18n="work.cs5.tag2">Accessibility</span>
+                <span class="exp-tag" data-i18n="work.cs5.tag3">Design Tokens</span>
+              </div>
+
+              <a class="btn btn-dark work-panel-cta" href="case-studies/iksir-design-system.html">
+                <span data-i18n="work.cta">View Case Study</span>
+                <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </article>
+
+            <!-- ── CS3: B2B Sales ERP Module ── -->
+            <article class="work-panel" role="tabpanel" id="work-panel-3" aria-labelledby="work-tab-3" tabindex="0" hidden>
+              <span class="work-panel-ghost-num" aria-hidden="true">03</span>
+              <div class="work-panel-top">
+                <span class="work-panel-tag" data-i18n="work.cs3.tag">ERP · Sales Operations</span>
+                <span class="work-panel-nda">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                  <span data-i18n="work.nda">NDA: specifics generalized, no confidential data shown</span>
+                </span>
+              </div>
+              <h3 class="work-panel-title" data-i18n="work.cs3.title">B2B Sales ERP Module</h3>
+              <p class="work-panel-meta" data-i18n="work.cs3.role">Product designer, with a business analyst, a tech lead and developers</p>
+
+              <div class="work-panel-flow">
+                <div class="work-flow-step">
+                  <span class="work-flow-label" data-i18n="work.flow_problem">Problem</span>
+                  <p data-i18n="work.cs3.problem">Client, order, and invoice data fragmented across tools: dense screens, poor readability.</p>
+                </div>
+                <svg class="work-flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="work-flow-step">
+                  <span class="work-flow-label" data-i18n="work.flow_approach">Approach</span>
+                  <p data-i18n="work.cs3.approach">Mid-fidelity, three-zone layout (navigation, tables, and quick actions), prioritizing logic over polish across 4 end-to-end sales flows.</p>
+                </div>
+                <svg class="work-flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="work-flow-step work-flow-step--outcome">
+                  <span class="work-flow-label" data-i18n="work.flow_outcome">Outcome</span>
+                  <p data-i18n="work.cs3.outcome">A clear data hierarchy across the full quote-to-return flow, and the layout foundation for 3 more ERP modules.</p>
+                </div>
+              </div>
+
+              <div class="work-panel-stats">
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="8">0</span><span class="work-stat-suffix"></span></span>
+                  <span class="work-stat-label" data-i18n="work.cs3.stat1_label">core screens</span>
+                </div>
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="50">0</span><span class="work-stat-suffix"></span></span>
+                  <span class="work-stat-label" data-i18n="work.cs3.stat2_label">frame states</span>
+                </div>
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="9.1">0.0</span><span class="work-stat-suffix"></span></span>
+                  <span class="work-stat-label" data-i18n="work.cs3.stat3_label">version reached</span>
+                </div>
+              </div>
+
+              <div class="work-panel-tags">
+                <span class="exp-tag" data-i18n="work.cs3.tag1">Data Visualization</span>
+                <span class="exp-tag" data-i18n="work.cs3.tag2">Enterprise UX</span>
+                <span class="exp-tag" data-i18n="work.cs3.tag3">Prototyping</span>
+              </div>
+
+              <a class="btn btn-dark work-panel-cta" href="case-studies/b2b-sales-erp.html">
+                <span data-i18n="work.cta">View Case Study</span>
+                <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </article>
+
+            <!-- ── CS4: eLearning Platform ── -->
+            <article class="work-panel" role="tabpanel" id="work-panel-4" aria-labelledby="work-tab-4" tabindex="0" hidden>
+              <span class="work-panel-ghost-num" aria-hidden="true">04</span>
+              <div class="work-panel-top">
+                <span class="work-panel-tag" data-i18n="work.cs4.tag">eLearning · Multi-Role Platform</span>
+                <span class="work-panel-nda">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                  <span data-i18n="work.nda">NDA: specifics generalized, no confidential data shown</span>
+                </span>
+              </div>
+              <h3 class="work-panel-title" data-i18n="work.cs4.title">eLearning Platform</h3>
+              <p class="work-panel-meta" data-i18n="work.cs4.role">UI/UX designer at Five Angles (agency)</p>
+
+              <div class="work-panel-flow">
+                <div class="work-flow-step">
+                  <span class="work-flow-label" data-i18n="work.flow_problem">Problem</span>
+                  <p data-i18n="work.cs4.problem">Teachers hosted lessons on YouTube with no control over courses, students, or analytics.</p>
+                </div>
+                <svg class="work-flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="work-flow-step">
+                  <span class="work-flow-label" data-i18n="work.flow_approach">Approach</span>
+                  <p data-i18n="work.cs4.approach">Ran a Design Thinking process across 3 roles (Teacher, Admin, Super Admin), with role-based permissions and modular chapters → lessons → exams.</p>
+                </div>
+                <svg class="work-flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="work-flow-step work-flow-step--outcome">
+                  <span class="work-flow-label" data-i18n="work.flow_outcome">Outcome</span>
+                  <p data-i18n="work.cs4.outcome">Teachers can now fully manage courses without external platforms, a centralized ecosystem ready to scale.</p>
+                </div>
+              </div>
+
+              <div class="work-panel-stats">
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="3">0</span><span class="work-stat-suffix"></span></span>
+                  <span class="work-stat-label" data-i18n="work.cs4.stat1_label">user roles designed</span>
+                </div>
+                <div class="work-stat">
+                  <span class="work-stat-value"><span class="work-stat-num" data-count="3">0</span><span class="work-stat-suffix"></span></span>
+                  <span class="work-stat-label" data-i18n="work.cs4.stat2_label">dashboards shipped</span>
+                </div>
+              </div>
+
+              <div class="work-panel-tags">
+                <span class="exp-tag" data-i18n="work.cs4.tag1">Design Thinking</span>
+                <span class="exp-tag" data-i18n="work.cs4.tag2">Role-Based UX</span>
+                <span class="exp-tag" data-i18n="work.cs4.tag3">Arabic UX</span>
+              </div>
+
+              <a class="btn btn-dark work-panel-cta" href="https://nadirdesign.notion.site/eLearning-Platform-Teacher-Side-2789267c734580818447e1667e1b8630?source=copy_link" target="_blank" rel="noopener noreferrer">
+                <span data-i18n="work.cta">View Case Study</span>
+                <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         HOW I WORK (jobs site only)
+         Takes the place of Services and Studio. Same card pattern as the
+         main site's Services section (.svc-card: one promise line plus four
+         bullets, equal height by construction), but organised by who I work
+         with instead of by what a client can buy. Every bullet is a fact
+         from the case study its card links to. Do not add a claim here that a case study cannot back.
+    ══════════════════════════════════════════════ -->
+    <section id="how" class="services-section how-section" aria-labelledby="how-title">
+      <div class="services-container">
+
+        <div class="exp-header">
+          <div class="exp-label-row">
+            <span class="exp-label-line" aria-hidden="true"></span>
+            <span class="exp-label-text" data-i18n="how.label">HOW I WORK</span>
+          </div>
+          <div class="exp-title-row">
+            <h2 class="exp-title" id="how-title" data-i18n="how.title">Inside a team</h2>
+            <p class="exp-subtitle" data-i18n="how.subtitle">What working with me looks like, taken from the projects above.</p>
+          </div>
+        </div>
+
+        <div class="svc-grid">
+          <article class="svc-card how-card">
+            <div class="svc-top">
+              <span class="svc-idx" aria-hidden="true">01</span>
+            </div>
+            <h3 class="svc-title" data-i18n="how.c1_title">With product and business</h3>
+            <p class="svc-promise" data-i18n="how.c1_promise">Business rules first, screens second.</p>
+            <ul class="svc-list">
+              <li data-i18n="how.c1_b1">Functional documents turned into flows</li>
+              <li data-i18n="how.c1_b2">Structure agreed before any polish</li>
+              <li data-i18n="how.c1_b3">One task model for six workflows</li>
+              <li data-i18n="how.c1_b4">Tested with the people who do the job</li>
+            </ul>
+            <div class="svc-foot">
+              <a class="svc-cta" href="case-studies/task-master.html"><span data-i18n="how.c1_link">See it in Task Master</span><svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+          <article class="svc-card how-card">
+            <div class="svc-top">
+              <span class="svc-idx" aria-hidden="true">02</span>
+            </div>
+            <h3 class="svc-title" data-i18n="how.c2_title">With engineers</h3>
+            <p class="svc-promise" data-i18n="how.c2_promise">A spec is a conversation, not a handoff.</p>
+            <ul class="svc-list">
+              <li data-i18n="how.c2_b1">Every state designed, edge cases included</li>
+              <li data-i18n="how.c2_b2">Business rules visible in the interface</li>
+              <li data-i18n="how.c2_b3">Short review loops, straight back into Figma</li>
+              <li data-i18n="how.c2_b4">Nine revisions of one module, one dev team</li>
+            </ul>
+            <div class="svc-foot">
+              <a class="svc-cta" href="case-studies/b2b-sales-erp.html"><span data-i18n="how.c2_link">See it in B2B Sales ERP</span><svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+          <article class="svc-card how-card">
+            <div class="svc-top">
+              <span class="svc-idx" aria-hidden="true">03</span>
+            </div>
+            <h3 class="svc-title" data-i18n="how.c3_title">With other designers</h3>
+            <p class="svc-promise" data-i18n="how.c3_promise">A system someone else can pick up and use.</p>
+            <ul class="svc-list">
+              <li data-i18n="how.c3_b1">Led and reviewed a second designer on Iksir</li>
+              <li data-i18n="how.c3_b2">Docs written for designers and developers</li>
+              <li data-i18n="how.c3_b3">A documentation site non-designers use</li>
+              <li data-i18n="how.c3_b4">Governance rules as the system grows</li>
+            </ul>
+            <div class="svc-foot">
+              <a class="svc-cta" href="case-studies/iksir-design-system.html"><span data-i18n="how.c3_link">See it in Iksir Design System</span><svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Two facts a remote team asks about that are not tied to one
+             project: how the distance is handled, and where AI sits. -->
+        <div class="how-notes">
+          <aside class="svc-partner how-note">
+            <div class="svc-partner-text">
+              <span class="svc-partner-label" data-i18n="how.remote_label">Remote</span>
+              <h3 class="svc-partner-title" data-i18n="how.remote_title">Remote since 2024</h3>
+              <p class="svc-partner-body" data-i18n="how.remote_body">I have worked from Algeria with teams in France and the UAE. The routine is simple: versioned Figma files, written specs and short review calls.</p>
+            </div>
+          </aside>
+          <aside class="svc-partner how-note">
+            <div class="svc-partner-text">
+              <span class="svc-partner-label" data-i18n="how.ai_label">Tools</span>
+              <h3 class="svc-partner-title" data-i18n="how.ai_title">AI in my daily work</h3>
+              <p class="svc-partner-body" data-i18n="how.ai_body">I use Claude with the Figma MCP and Figma Make every day to explore options and prototype faster. The design decisions stay mine.</p>
+            </div>
+          </aside>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         EXPERIENCE SECTION
+    ══════════════════════════════════════════════ -->
+    <section id="experience" class="exp-section">
+      <div class="exp-container">
+
+        <div class="exp-header">
+          <div class="exp-label-row">
+            <span class="exp-label-line" aria-hidden="true"></span>
+            <span class="exp-label-text" data-i18n="experience.label">TRACK RECORD</span>
+          </div>
+          <div class="exp-title-row">
+            <h2 class="exp-title" data-i18n="experience.title">My Experience</h2>
+            <p class="exp-subtitle" data-i18n="experience.subtitle">The same history as my CV, with more detail on each role.</p>
+          </div>
+        </div>
+
+        <div class="expa-list" role="list">
+
+          <!-- ── A1: Nawat Studio ──
+               Wording mirrors the Master CV. Closed by default on this site:
+               the Datamaster entry below is the one a hiring manager needs
+               open, since it is the day-to-day product-team role. -->
+          <div class="expa-item" id="expa-nawat" role="listitem">
+            <button class="expa-trigger" aria-expanded="false" aria-controls="expa-nawat-body">
+              <span class="expa-num" aria-hidden="true">01</span>
+              <span class="expa-meta">
+                <span class="expa-company" data-i18n="experience.nawat.company">Nawat Studio</span>
+                <span class="expa-sublabel">
+                  <span class="expa-role-inline" data-i18n="experience.nawat.role">Product Designer</span>
+                  <span class="expa-loc-sep" aria-hidden="true">·</span>
+                  <span class="expa-loc-inline"><span data-i18n="experience.nawat.city">Tlemcen</span>, <span class="exp-country" data-i18n="experience.nawat.country">Algeria</span> · <span data-i18n="experience.nawat.work_type">Remote</span></span>
+                </span>
+              </span>
+              <span class="expa-right">
+                <span class="expa-hint" aria-hidden="true" data-i18n="experience.nawat.hint">3 highlights</span>
+                <span class="expa-period">
+                  <span data-i18n="experience.nawat.dates">Jan 2026 - Present</span>
+                  <strong> · </strong><strong data-i18n="experience.nawat.duration">7 mos</strong>
+                </span>
+                <svg class="expa-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 6 8 10.5 12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <!-- Peek: first line bleeds through on hover -->
+            <div class="expa-peek" aria-hidden="true">
+              <p data-i18n="experience.nawat.desc_0">- Founded an independent product design studio for B2B and enterprise software. Datamaster Analytics is its first client.</p>
+            </div>
+            <div class="expa-body" id="expa-nawat-body" role="region">
+              <div class="expa-body-inner">
+                <div class="expa-body-content">
+                  <div class="exp-desc">
+                    <p data-i18n="experience.nawat.desc_0">- Founded an independent product design studio for B2B and enterprise software. Datamaster Analytics is its first client.</p>
+                    <p data-i18n="experience.nawat.desc_1">- Led the Iksir design system for Datamaster's web and mobile products, working with a second designer whose work I reviewed.</p>
+                    <p data-i18n="experience.nawat.desc_2">- Three-layer tokens and support for Arabic (RTL), English and French. V1 shipped with 1,033 variables, 24 components and a documentation site that non-designers use.</p>
+                  </div>
+                  <div class="exp-tags">
+                    <span class="exp-tag" data-i18n="experience.tag_pd">Product Design</span>
+                    <span class="exp-tag" data-i18n="experience.tag_ds">Design Systems</span>
+                    <span class="exp-tag" data-i18n="experience.tag_lead">Leadership</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── A2: Datamaster Analytics ── open by default (see A1). -->
+          <div class="expa-item expa-item--open" id="expa-dma" role="listitem">
+            <button class="expa-trigger" aria-expanded="true" aria-controls="expa-dma-body">
+              <span class="expa-num" aria-hidden="true">02</span>
+              <span class="expa-meta">
+                <span class="expa-company" data-i18n="experience.dma.company">Datamaster Analytics</span>
+                <span class="expa-sublabel">
+                  <span class="expa-role-inline" data-i18n="experience.dma.role_head">Product Designer (Contract)</span>
+                  <span class="expa-loc-sep" aria-hidden="true">·</span>
+                  <span class="expa-loc-inline"><span data-i18n="experience.dma.city">Bezons, Île-de-France</span>, <span class="exp-country" data-i18n="experience.dma.country">France</span> · <span data-i18n="experience.dma.work_type">Remote</span></span>
+                </span>
+              </span>
+              <span class="expa-right">
+                <span class="expa-hint" aria-hidden="true" data-i18n="experience.dma.hint">2 roles · 6 bullets</span>
+                <span class="expa-period">
+                  <span data-i18n="experience.dma.dates">Sep 2024 - Present</span>
+                  <strong> · </strong><strong data-i18n="experience.dma.duration">2 yrs</strong>
+                </span>
+                <svg class="expa-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 6 8 10.5 12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="expa-peek" aria-hidden="true">
+              <p data-i18n="experience.dma.desc_a0">Only designer on a growing ERP platform, working daily with business analysts, tech leads and developers.</p>
+            </div>
+            <div class="expa-body" id="expa-dma-body" role="region">
+              <div class="expa-body-inner">
+                <div class="expa-body-content">
+                  <div class="exp-multi">
+                    <div class="exp-timeline-bar" aria-hidden="true"></div>
+                    <div class="exp-roles">
+                      <div class="exp-role-block">
+                        <div class="exp-role-header">
+                          <span class="exp-role" data-i18n="experience.dma.role_a">Product Designer</span>
+                          <span class="exp-dates-small" data-i18n="experience.dma.dates_a">Dec 2024 - Present</span>
+                        </div>
+                        <div class="exp-desc">
+                          <p data-i18n="experience.dma.desc_a0">Only designer on a growing ERP platform, working daily with business analysts, tech leads and developers.</p>
+                          <p data-i18n="experience.dma.desc_a1">- Designed five core ERP modules: B2B Sales, Purchase, POS, Finance and Accounting. The B2B Sales module is now on its 9th major revision with the dev team.</p>
+                          <p data-i18n="experience.dma.desc_a2">- Designed Task Master, a task app for supermarket staff on mobile, tablet and desktop, over two iterations. It is in production, and usability tests with real staff showed inventory tasks taking about half the time.</p>
+                          <p data-i18n="experience.dma.desc_a3">- Leading an information architecture restructure of the whole platform ahead of a full redesign.</p>
+                          <p data-i18n="experience.dma.desc_a4">- Since February 2026 the design system work (Iksir) runs through Nawat Studio, listed above. My direct work on the ERP modules continues.</p>
+                        </div>
+                        <div class="exp-tags">
+                          <span class="exp-tag" data-i18n="experience.tag_pd">Product Design</span>
+                          <span class="exp-tag" data-i18n="experience.tag_ds">Design Systems</span>
+                          <span class="exp-tag" data-i18n="experience.tag_ux">UX Research</span>
+                        </div>
+                      </div>
+                      <div class="exp-role-block">
+                        <div class="exp-role-header">
+                          <span class="exp-role" data-i18n="experience.dma.role_b">UI/UX Designer</span>
+                          <span class="exp-dates-small" data-i18n="experience.dma.dates_b">Sep 2024 - Nov 2024</span>
+                        </div>
+                        <div class="exp-desc">
+                          <p data-i18n="experience.dma.desc_b0">Started on the company's mobile product, then moved to Product Designer after three months.</p>
+                          <p data-i18n="experience.dma.desc_b1">- Designed the first iteration of the task app for retail store teams, shipped to production.</p>
+                        </div>
+                        <div class="exp-tags">
+                          <span class="exp-tag" data-i18n="experience.tag_pd">Product Design</span>
+                          <span class="exp-tag" data-i18n="experience.tag_ux">UX Research</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── A3: Five Angles ── -->
+          <div class="expa-item" id="expa-five" role="listitem">
+            <button class="expa-trigger" aria-expanded="false" aria-controls="expa-five-body">
+              <span class="expa-num" aria-hidden="true">03</span>
+              <span class="expa-meta">
+                <span class="expa-company" data-i18n="experience.five.company">Five Angles</span>
+                <span class="expa-sublabel">
+                  <span class="expa-role-inline" data-i18n="experience.five.role">UI/UX Designer</span>
+                  <span class="expa-loc-sep" aria-hidden="true">·</span>
+                  <span class="expa-loc-inline"><span data-i18n="experience.five.city">Dubai</span>, <span class="exp-country" data-i18n="experience.five.country">UAE</span> · <span data-i18n="experience.five.work_type">Remote</span></span>
+                </span>
+              </span>
+              <span class="expa-right">
+                <span class="expa-hint" aria-hidden="true" data-i18n="experience.five.hint">5 highlights</span>
+                <span class="expa-period">
+                  <span data-i18n="experience.five.dates">Mar 2024 - Dec 2024</span>
+                  <strong> · </strong><strong data-i18n="experience.five.duration">10 mos</strong>
+                </span>
+                <svg class="expa-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 6 8 10.5 12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="expa-peek" aria-hidden="true">
+              <p><span data-i18n="experience.five.desc_0a">Worked with a </span><strong data-i18n="experience.five.desc_0b">Dubai-based agency</strong><span data-i18n="experience.five.desc_0c"> on a range of client projects across multiple industries.</span></p>
+            </div>
+            <div class="expa-body" id="expa-five-body" role="region">
+              <div class="expa-body-inner">
+                <div class="expa-body-content">
+                  <div class="exp-desc">
+                    <p><span data-i18n="experience.five.desc_0a">Worked with a </span><strong data-i18n="experience.five.desc_0b">Dubai-based agency</strong><span data-i18n="experience.five.desc_0c"> on a range of client projects across multiple industries.</span></p>
+                    <p data-i18n="experience.five.desc_1">- Designed the Super Admin, Admin, and Teacher dashboards for a multi-role e-learning platform, course management, content creation flows, and student progress tracking.</p>
+                    <p data-i18n="experience.five.desc_2">- Redesigned a real estate platform, property listings, search and filter systems, and agent dashboard.</p>
+                    <p data-i18n="experience.five.desc_3">- Designed a case management system for a charity organization supporting divorced women, sensitive user context requiring clear, accessible flows.</p>
+                    <p data-i18n="experience.five.desc_4">- Delivered multiple landing page designs for various clients.</p>
+                  </div>
+                  <div class="exp-tags">
+                    <span class="exp-tag" data-i18n="experience.tag_pd">Product Design</span>
+                    <span class="exp-tag" data-i18n="experience.tag_ux">UX Research</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── A4: SARL GLD ── -->
+          <div class="expa-item" id="expa-gld" role="listitem">
+            <button class="expa-trigger" aria-expanded="false" aria-controls="expa-gld-body">
+              <span class="expa-num" aria-hidden="true">04</span>
+              <span class="expa-meta">
+                <span class="expa-company" data-i18n="experience.gld.company">SARL GLD</span>
+                <span class="expa-sublabel">
+                  <span class="expa-role-inline" data-i18n="experience.gld.role">UX Designer</span>
+                  <span class="expa-loc-sep" aria-hidden="true">·</span>
+                  <span class="expa-loc-inline"><span data-i18n="experience.gld.city">Tlemcen</span>, <span class="exp-country" data-i18n="experience.gld.country">Algeria</span> · <span data-i18n="experience.gld.work_type">Remote</span></span>
+                </span>
+              </span>
+              <span class="expa-right">
+                <span class="expa-hint" aria-hidden="true" data-i18n="experience.gld.hint">2 highlights</span>
+                <span class="expa-period">
+                  <span data-i18n="experience.gld.dates">July 2024</span>
+                  <strong> · </strong><strong data-i18n="experience.gld.duration">1 mo</strong>
+                </span>
+                <svg class="expa-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 6 8 10.5 12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="expa-peek" aria-hidden="true">
+              <p data-i18n="experience.gld.desc_0">Conducted a UX audit for the e-commerce platform of a B2B wholesale company (cosmetics and detergents sector).</p>
+            </div>
+            <div class="expa-body" id="expa-gld-body" role="region">
+              <div class="expa-body-inner">
+                <div class="expa-body-content">
+                  <div class="exp-desc">
+                    <p data-i18n="experience.gld.desc_0">Conducted a UX audit for the e-commerce platform of a B2B wholesale company (cosmetics and detergents sector).</p>
+                    <p data-i18n="experience.gld.desc_1">- Identified usability issues across key user flows and worked directly with the developer to implement improvements on the spot</p>
+                  </div>
+                  <div class="exp-tags">
+                    <span class="exp-tag" data-i18n="experience.tag_pd">Product Design</span>
+                    <span class="exp-tag" data-i18n="experience.tag_ux">UX Research</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── A5: Atqin ── -->
+          <div class="expa-item" id="expa-atqin" role="listitem">
+            <button class="expa-trigger" aria-expanded="false" aria-controls="expa-atqin-body">
+              <span class="expa-num" aria-hidden="true">05</span>
+              <span class="expa-meta">
+                <span class="expa-company" data-i18n="experience.atqin.company">Atqin</span>
+                <span class="expa-sublabel">
+                  <span class="expa-role-inline"><span data-i18n="experience.atqin.role">Co-Founder &amp; Product Design Lead</span> <span class="expa-volunteer-badge" data-i18n="experience.atqin.badge">Volunteer</span></span>
+                  <span class="expa-loc-sep" aria-hidden="true">·</span>
+                  <span class="expa-loc-inline"><span data-i18n="experience.atqin.city">Tlemcen</span>, <span data-i18n="experience.atqin.country">Algeria</span> · <span data-i18n="experience.atqin.work_type">Remote</span></span>
+                </span>
+              </span>
+              <span class="expa-right">
+                <span class="expa-hint" aria-hidden="true" data-i18n="experience.atqin.hint">2 highlights</span>
+                <span class="expa-period">
+                  <span data-i18n="experience.atqin.dates">2023 - Present</span>
+                  <strong> · </strong><strong data-i18n="experience.atqin.duration">3 yrs 2 mos</strong>
+                </span>
+                <svg class="expa-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 6 8 10.5 12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="expa-peek" aria-hidden="true">
+              <p data-i18n="experience.atqin.desc_0">- Co-founded a volunteer community of tech professionals, designed a system for a nonprofit Quran clubs management platform and a website for a historic cultural establishment.</p>
+            </div>
+            <div class="expa-body" id="expa-atqin-body" role="region">
+              <div class="expa-body-inner">
+                <div class="expa-body-content">
+                  <div class="exp-desc">
+                    <p data-i18n="experience.atqin.desc_0">- Co-founded a volunteer community of tech professionals, designed a system for a nonprofit Quran clubs management platform and a website for a historic cultural establishment.</p>
+                    <p data-i18n="experience.atqin.desc_1">- Coordinating team projects and managing community growth.</p>
+                  </div>
+                  <div class="exp-tags">
+                    <span class="exp-tag" data-i18n="experience.tag_pd">Product Design</span>
+                    <span class="exp-tag" data-i18n="experience.tag_lead">Leadership</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.expa-list -->
+      </div><!-- /.exp-container -->
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════
+         SKILLS SECTION
+    ══════════════════════════════════════════════ -->
+    <section id="skills" class="skills-section" aria-labelledby="skills-title">
+      <div class="skills-container">
+
+        <div class="exp-header">
+          <div class="exp-label-row">
+            <span class="exp-label-line" aria-hidden="true"></span>
+            <span class="exp-label-text" data-i18n="skills.label">CAPABILITIES</span>
+          </div>
+          <div class="exp-title-row">
+            <h2 class="exp-title" id="skills-title" data-i18n="skills.title">My Skills</h2>
+            <p class="exp-subtitle" data-i18n="skills.subtitle">Grouped the way a hiring team usually asks about them.</p>
+          </div>
+        </div>
+
+        <div class="skills-grid" role="list">
+
+          <!-- Product Skills -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.product.title">Product Skills</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag" data-i18n="skills.product.t1">Product Thinking</span>
+              <span class="skill-tag" data-i18n="skills.product.t2">Agile / Scrum</span>
+              <span class="skill-tag" data-i18n="skills.product.t3">Design Thinking Framework</span>
+              <span class="skill-tag" data-i18n="skills.product.t4">Stakeholder Communication</span>
+              <span class="skill-tag" data-i18n="skills.product.t5">Design Critique &amp; Feedback</span>
+            </div>
+          </div>
+
+          <!-- UX Skills -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.ux.title">UX Skills</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag" data-i18n="skills.ux.t1">User Research</span>
+              <span class="skill-tag" data-i18n="skills.ux.t2">Usability Testing</span>
+              <span class="skill-tag" data-i18n="skills.ux.t3">Wireframing &amp; Prototyping</span>
+              <span class="skill-tag" data-i18n="skills.ux.t4">User Flows</span>
+              <span class="skill-tag" data-i18n="skills.ux.t5">Information Architecture</span>
+              <span class="skill-tag" data-i18n="skills.ux.t6">Competitive Analysis</span>
+            </div>
+          </div>
+
+          <!-- UI Skills -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.ui.title">UI Skills</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag" data-i18n="skills.ui.t1">Visual Design</span>
+              <span class="skill-tag" data-i18n="skills.ui.t2">Design Systems</span>
+              <span class="skill-tag" data-i18n="skills.ui.t3">Mobile App Design</span>
+              <span class="skill-tag" data-i18n="skills.ui.t4">Responsive / Web Design</span>
+              <span class="skill-tag" data-i18n="skills.ui.t5">Typography</span>
+              <span class="skill-tag" data-i18n="skills.ui.t6">Color Theory</span>
+            </div>
+          </div>
+
+          <!-- Design Systems (jobs site: mirrors the CV skills line) -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.systems.title">Design Systems</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag" data-i18n="skills.systems.t1">Design Tokens</span>
+              <span class="skill-tag" data-i18n="skills.systems.t2">Component Libraries</span>
+              <span class="skill-tag" data-i18n="skills.systems.t3">Documentation</span>
+              <span class="skill-tag" data-i18n="skills.systems.t4">Accessibility (WCAG 2.1 AA)</span>
+              <span class="skill-tag" data-i18n="skills.systems.t5">RTL &amp; LTR</span>
+            </div>
+          </div>
+
+          <!-- Leading & Reviewing (jobs site: replaces "Studio & Leadership"; facts from Iksir, no client-side tags) -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.lead.title">Leading &amp; Reviewing</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag" data-i18n="skills.lead.t1">Design Direction</span>
+              <span class="skill-tag" data-i18n="skills.lead.t2">Mentoring a Designer</span>
+              <span class="skill-tag" data-i18n="skills.lead.t3">Design Reviews</span>
+            </div>
+          </div>
+
+          <!-- Design Tools -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.tools.title">Design Tools</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">Figma Design · Make · Slides</span>
+              <span class="skill-tag">FigJam</span>
+              <span class="skill-tag">Affinity Design</span>
+              <span class="skill-tag">Claude · Cowork</span>
+              <span class="skill-tag">Gemini · Nano Banana</span>
+            </div>
+          </div>
+
+          <!-- Technical -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.technical.title">Technical</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag" data-i18n="skills.technical.t1">HTML &amp; CSS · Basics</span>
+              <span class="skill-tag" data-i18n="skills.technical.t2">Web &amp; Mobile Development · Basic Understanding</span>
+            </div>
+          </div>
+
+          <!-- Collaboration Tools -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.collab.title">Collaboration Tools</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">ClickUp</span>
+              <span class="skill-tag">Teams</span>
+              <span class="skill-tag">Notion</span>
+              <span class="skill-tag">Discord</span>
+              <span class="skill-tag">Trello</span>
+              <span class="skill-tag">Jira</span>
+              <span class="skill-tag">Slack</span>
+              <span class="skill-tag">Google Meet · Calendar · Drive</span>
+            </div>
+          </div>
+
+          <!-- Soft Skills -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.soft.title">Soft Skills</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag" data-i18n="skills.soft.t1">Problem Solving</span>
+              <span class="skill-tag" data-i18n="skills.soft.t2">Cross-functional Collaboration</span>
+              <span class="skill-tag" data-i18n="skills.soft.t3">Self-management / Remote Work</span>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="skill-card" role="listitem">
+            <div class="skill-card-header">
+              <span class="skill-card-line" aria-hidden="true"></span>
+              <h3 class="skill-card-title" data-i18n="skills.languages.title">Languages</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag" data-i18n="skills.languages.t1">Arabic · Native</span>
+              <span class="skill-tag" data-i18n="skills.languages.t2">French · Professional</span>
+              <span class="skill-tag" data-i18n="skills.languages.t3">English · Intermediate</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════════
+       FOOTER — always-dark signature closing section
+  ══════════════════════════════════════════════ -->
+  <footer id="contact" class="site-footer">
+    <div class="footer-watermark" aria-hidden="true"><span data-i18n="footer.watermark">NADIR</span></div>
+
+    <div class="footer-inner">
+
+      <div class="footer-intro footer-reveal">
+        <div class="footer-badge">
+          <span class="footer-badge-dot" aria-hidden="true"></span>
+          <span data-i18n="footer.badge">Open to the right team</span>
+        </div>
+        <h2 class="footer-heading" data-i18n="footer.heading">Let's talk about the role</h2>
+        <p class="footer-subtitle" data-i18n="footer.subtitle">If your team builds B2B or data-heavy software and needs a product designer, write to me here or use any of the contacts below.</p>
+        <!-- Scroll cue. On short viewports the intro fills the screen and the
+             form below it is invisible, so this says "keep going". Decorative
+             only (aria-hidden): a screen reader reads straight on into the
+             form and never has the problem this solves. -->
+        <span class="footer-scroll-cue" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </span>
+      </div>
+
+      <div class="footer-main">
+
+        <!-- ── Contact form ── -->
+        <div class="footer-panel footer-form-panel footer-reveal">
+          <h3 class="footer-panel-title" data-i18n="footer.form_title">Send a Message</h3>
+
+          <form class="footer-form" id="footer-form" novalidate action="https://formspree.io/f/mkolebgp" method="POST">
+            <div class="ff-ptype-field">
+              <span class="ff-ptype-label" data-i18n="cs.form.ptype_label">What is it about?</span>
+              <div class="cs-ptype" role="radiogroup" aria-label="Message type">
+                <button type="button" class="cs-ptype-chip" data-value="Full-time role" data-i18n="cs.form.pt_full">A full-time role</button>
+                <button type="button" class="cs-ptype-chip" data-value="Contract role" data-i18n="cs.form.pt_contract">A contract role</button>
+                <button type="button" class="cs-ptype-chip" data-value="Something else" data-i18n="cs.form.pt_other">Something else</button>
+              </div>
+              <input type="hidden" name="project_type" id="ff-project-type" value="">
+              <input type="hidden" name="language" id="ff-language" value="">
+              <!-- Both sites post to the same inbox. These two fields say which
+                   site a message came from. -->
+              <input type="hidden" name="source" value="Jobs site (portfolio.nadirdesign.com)">
+              <input type="hidden" name="_subject" value="Jobs site: new message">
+            </div>
+            <div class="ff-field">
+              <input class="ff-input" type="text" id="ff-name" name="name" required autocomplete="name" placeholder=" ">
+              <label class="ff-label" for="ff-name" data-i18n="footer.form_name">Name</label>
+              <span class="ff-underline" aria-hidden="true"></span>
+              <span class="ff-error" id="ff-name-error" aria-live="polite"></span>
+            </div>
+
+            <div class="ff-field">
+              <input class="ff-input" type="email" id="ff-email" name="email" required autocomplete="email" placeholder=" ">
+              <label class="ff-label" for="ff-email" data-i18n="footer.form_email">Email</label>
+              <span class="ff-underline" aria-hidden="true"></span>
+              <span class="ff-error" id="ff-email-error" aria-live="polite"></span>
+            </div>
+
+            <div class="ff-field">
+              <textarea class="ff-input ff-textarea" id="ff-message" name="message" rows="4" required placeholder=" "></textarea>
+              <label class="ff-label" for="ff-message" data-i18n="footer.form_message">Message</label>
+              <span class="ff-underline" aria-hidden="true"></span>
+              <span class="ff-error" id="ff-message-error" aria-live="polite"></span>
+            <span class="ff-hint" data-i18n="footer.form_hint">What does your team build, and what would I work on?</span>
+            </div>
+
+            <button type="submit" class="footer-submit" id="footer-submit">
+              <span class="footer-submit-label" data-i18n="footer.form_send">Send Message</span>
+              <span class="footer-submit-icon" aria-hidden="true">
+                <svg class="icon-send" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+              </span>
+            </button>
+
+            <p class="ff-reply" data-i18n="footer.form_reply">I read every message myself and usually reply within a day.</p>
+
+            <p class="ff-status" id="ff-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <!-- ── Direct contacts ── -->
+        <div class="footer-panel footer-contacts-panel footer-reveal">
+          <h3 class="footer-panel-title" data-i18n="footer.contacts_title">Direct Contacts</h3>
+
+          <ul class="footer-contacts" role="list">
+            <li class="footer-contact footer-contact--cv">
+              <button type="button" class="fc-link fc-link--btn" data-cv-open>
+                <span class="fc-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+                </span>
+                <span class="fc-text">
+                  <span class="fc-label" data-i18n="footer.cv_label">R&#233;sum&#233; / CV</span>
+                  <span class="fc-value" data-i18n="footer.cv_value">Preview &amp; download (PDF)</span>
+                </span>
+                <svg class="fc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </li>
+
+            <li class="footer-contact footer-contact--email">
+              <a class="fc-link" href="mailto:contact@nadirdesign.com">
+                <span class="fc-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+                </span>
+                <span class="fc-text">
+                  <span class="fc-label" data-i18n="footer.contact_email">Email</span>
+                  <span class="fc-value">contact@nadirdesign.com</span>
+                </span>
+                <svg class="fc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+              <button type="button" class="fc-copy" data-copy-value="contact@nadirdesign.com" data-i18n-aria-label="footer.copy_label" aria-label="Copy email address">
+                <svg class="icon-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="icon-copied" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                <span class="fc-copy-tip" data-i18n="footer.copy_done" aria-hidden="true">Copied!</span>
+              </button>
+            </li>
+
+            <li class="footer-contact footer-contact--whatsapp">
+              <a class="fc-link" href="https://wa.me/213562296233" target="_blank" rel="noopener noreferrer">
+                <span class="fc-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.014 2C6.486 2 2 6.486 2 12.014c0 1.784.469 3.53 1.36 5.062L2 22l4.98-1.33a10.02 10.02 0 0 0 5.034 1.345h.004c5.528 0 10.014-4.486 10.014-10.014C22.028 6.486 17.542 2 12.014 2zm0 18.24h-.003a8.198 8.198 0 0 1-4.181-1.147l-.3-.178-3.108.831.83-3.032-.196-.31a8.19 8.19 0 0 1-1.256-4.39c0-4.53 3.686-8.216 8.218-8.216 2.195 0 4.259.856 5.812 2.41a8.163 8.163 0 0 1 2.405 5.815c0 4.531-3.687 8.217-8.221 8.217z"/></svg>
+                </span>
+                <span class="fc-text">
+                  <span class="fc-label" data-i18n="footer.contact_whatsapp">WhatsApp</span>
+                  <span class="fc-value" dir="ltr">+213 562 296 233</span>
+                </span>
+                <svg class="fc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+
+            <li class="footer-contact footer-contact--linkedin">
+              <a class="fc-link" href="https://www.linkedin.com/in/nadir-mostefaoui/" target="_blank" rel="noopener noreferrer">
+                <span class="fc-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </span>
+                <span class="fc-text">
+                  <span class="fc-label" data-i18n="footer.contact_linkedin">LinkedIn</span>
+                  <span class="fc-value">nadir-mostefaoui</span>
+                </span>
+                <svg class="fc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+
+            <li class="footer-contact footer-contact--behance">
+              <a class="fc-link" href="https://www.behance.net/nadir_mostefaoui" target="_blank" rel="noopener noreferrer">
+                <span class="fc-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><text x="12" y="17" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="14" fill="currentColor">Bē</text></svg>
+                </span>
+                <span class="fc-text">
+                  <span class="fc-label" data-i18n="footer.contact_behance">Behance</span>
+                  <span class="fc-value">nadir_mostefaoui</span>
+                </span>
+                <svg class="fc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copyright">
+          <span aria-hidden="true">© <span id="footer-year">2026</span></span>
+          <span data-i18n="footer.copyright">Nadir Mostefaoui. All rights reserved.</span>
+        </p>
+        <!-- Neither site is hidden from the other reader. One quiet line. -->
+        <p class="footer-freelance" data-i18n="footer.freelance" data-i18n-html>Looking for freelance or studio work instead? <a href="https://nadirdesign.com" target="_blank" rel="noopener">nadirdesign.com</a></p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ══════════════════════
+       BACK TO TOP — floating, appears after scrolling past the hero
+  ══════════════════════ -->
+  <button
+    type="button"
+    id="back-to-top"
+    class="back-to-top"
+    aria-label="Back to top"
+    data-i18n-aria-label="nav.back_to_top"
+  >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="12" y1="19" x2="12" y2="5"/>
+      <polyline points="5 12 12 5 19 12"/>
+    </svg>
+  </button>
+
+  <!-- Scripts -->
+  <!-- CV preview modal -->
+  <div class="cv-modal" id="cvModal" data-cv-pdf="assets/Nadir%20Mostefaoui%20-%20Product%20Designer%20-%20CV.pdf" hidden>
+    <div class="cv-modal__backdrop" data-cv-close></div>
+    <div class="cv-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="cvModalTitle">
+      <div class="cv-modal__head">
+        <div class="cv-modal__titles">
+          <h2 class="cv-modal__title" id="cvModalTitle" data-i18n="footer.cv_title">Curriculum Vitae</h2>
+          <p class="cv-modal__sub" data-i18n="footer.cv_sub">Nadir Mostefaoui · Product Designer</p>
+        </div>
+        <button type="button" class="cv-modal__close" data-cv-close data-i18n-aria-label="footer.cv_close" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="cv-modal__body">
+        <iframe class="cv-modal__frame" title="CV preview" src="about:blank" data-cv-src="assets/Nadir%20Mostefaoui%20-%20Product%20Designer%20-%20CV.pdf#view=FitH"></iframe>
+      </div>
+      <div class="cv-modal__foot">
+        <a class="btn btn-dark" href="assets/Nadir%20Mostefaoui%20-%20Product%20Designer%20-%20CV.pdf" download="Nadir Mostefaoui - Product Designer - CV.pdf">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+          <span data-i18n="footer.cv_download">Download PDF</span>
+        </a>
+        <a class="btn btn-ghost-fill" href="assets/Nadir%20Mostefaoui%20-%20Product%20Designer%20-%20CV.pdf" target="_blank" rel="noopener noreferrer">
+          <span data-i18n="footer.cv_open">Open in new tab</span>
+          <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/i18n.jobs.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/experience.js"></script>
+  <script src="js/work.js"></script>
+  <script src="js/skills.js"></script>
+  <script src="js/footer.js"></script>
+  <script src="js/cv.js"></script>
+  <script>
+    /* Hero scroll cue — fade out once the visitor starts scrolling */
+    (function () {
+      var cue = document.querySelector('.scroll-cue');
+      if (!cue) return;
+      var onScroll = function () {
+        cue.classList.toggle('is-hidden', window.scrollY > 60);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
+
+  <script>
+    /* ── Hero entrance trigger ──────────────────────────────────
+       The signature intro overlay that used to gate this was removed
+       (2026-08-05). The hero now animates straight in on load, so the page
+       is usable ~2.6s sooner.
+
+       The sequence itself is entirely in CSS, keyed off body.hero-in — this
+       only decides WHEN to start it. Two rules matter:
+
+       1. `hero-pending` (set in the markup, so it applies at parse time and
+          nothing can flash) must be REMOVED in the same frame that
+          `hero-in` is added. It holds the elements at opacity:0, and since
+          the animations use fill-mode `backwards` — which hands the element
+          back to the normal cascade once it finishes — leaving the class on
+          would make the whole hero disappear again the moment it landed.
+
+       2. Double rAF, not a timeout: waits for the first real paint so the
+          animation can't be skipped or start mid-layout while fonts settle.
+
+       Runs immediately if the DOM is already parsed (this script sits at the
+       end of body, so that is the normal case) rather than relying solely on
+       DOMContentLoaded, which may already have fired. */
+    (function () {
+      function start() {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            document.body.classList.remove('hero-pending');
+            document.body.classList.add('hero-in');
+
+            // Incoming case-study section link (see __pendingScrollTarget in
+            // the head script). Previously this had to wait for the overlay
+            // to clear; now it just runs once the hero is released.
+            const targetId = window.__pendingScrollTarget;
+            const target   = targetId && document.getElementById(targetId);
+            if (target) target.scrollIntoView({ block: 'start' });
+          });
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+      } else {
+        start();
+      }
+    })();
+  </script>
+
+  <script>
+    /* ── Custom cursor ───────────────────────────────────────── */
+    (function () {
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+
+      const dot  = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+      if (!dot || !ring) return;
+
+      let mouseX = 0, mouseY = 0;
+      let ringX  = 0, ringY  = 0;
+      let shown  = false;
+      const SPRING = 0.10;
+
+      document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        if (!shown) {
+          shown = true;
+          dot.classList.add('cur-visible');
+          ring.classList.add('cur-visible');
+        }
+
+        dot.style.left = mouseX + 'px';
+        dot.style.top  = mouseY + 'px';
+      }, { passive: true });
+
+      /* Ring spring lag */
+      (function animate() {
+        ringX += (mouseX - ringX) * SPRING;
+        ringY += (mouseY - ringY) * SPRING;
+        ring.style.left = ringX + 'px';
+        ring.style.top  = ringY + 'px';
+        requestAnimationFrame(animate);
+      })();
+
+      /* Hover state */
+      document.querySelectorAll('a, button, [role="button"]').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          dot.classList.add('cur-hover');
+          ring.classList.add('cur-hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          dot.classList.remove('cur-hover');
+          ring.classList.remove('cur-hover');
+        });
+      });
+
+      /* Hide on window leave */
+      document.addEventListener('mouseleave', () => {
+        dot.classList.remove('cur-visible');
+        ring.classList.remove('cur-visible');
+      });
+      document.addEventListener('mouseenter', () => {
+        if (shown) {
+          dot.classList.add('cur-visible');
+          ring.classList.add('cur-visible');
+        }
+      });
+    })();
+  </script>
+
+  <script>
+    /* ── Navbar: compact on scroll + mobile menu ─────────────── */
+    (function () {
+      const navbar       = document.getElementById('navbar');
+      const toggle       = document.getElementById('nav-toggle');
+      const navMenu      = document.getElementById('nav-links');
+      const backdrop     = document.getElementById('nav-backdrop');
+      const identity     = document.getElementById('nav-logo');
+      const MOBILE_QUERY = '(max-width: 900px)';
+      if (!navbar || !toggle || !navMenu) return;
+
+      function openMenu() {
+        navMenu.classList.add('open');
+        if (backdrop) backdrop.classList.add('is-visible');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close menu');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        navMenu.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('is-visible');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+        document.body.style.overflow = '';
+      }
+
+      function isOpen() {
+        return navMenu.classList.contains('open');
+      }
+
+      /* Identity → smooth scroll to top (and close the mobile menu first,
+         so the scroll is actually visible instead of hidden behind it) */
+      if (identity) {
+        identity.addEventListener('click', e => {
+          e.preventDefault();
+          if (isOpen()) closeMenu();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      /* Compact class on scroll */
+      const onScroll = () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 12);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      /* Mobile menu open/close */
+      toggle.addEventListener('click', () => {
+        isOpen() ? closeMenu() : openMenu();
+      });
+
+      /* Tapping the dimmed backdrop closes the pop-up, same as tapping
+         outside any other modal */
+      if (backdrop) {
+        backdrop.addEventListener('click', () => {
+          if (isOpen()) closeMenu();
+        });
+      }
+
+      /* Close on any link click inside the menu — including the
+         "Contact Me" CTA, not just .nav-link, so tapping it doesn't leave
+         the full-screen menu stuck open over the section it jumped to.
+         The lang/theme buttons are deliberately excluded: switching
+         language or theme isn't navigation, so the menu should stay open
+         for the user to then pick a section. */
+      navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', e => {
+          if (!isOpen()) return;
+
+          const href   = link.getAttribute('href') || '';
+          const target = href.startsWith('#') && href.length > 1
+            ? document.getElementById(href.slice(1))
+            : null;
+
+          /* Same-page section links need special handling on mobile: the
+             open menu locks scrolling with body{overflow:hidden}, and the
+             browser's native anchor jump runs against that locked (and
+             therefore wrong) layout. The observed symptom was every menu
+             link landing at roughly the same offset, e.g. tapping
+             "Experience" scrolled past it and stopped inside "Studio".
+             So cancel the native jump, unlock the body, and scroll
+             ourselves once layout has settled (two frames is enough for
+             the overflow change to take effect). Cross-page links, like
+             the case-study entries, fall through untouched. */
+          if (target) {
+            e.preventDefault();
+            closeMenu();
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              history.replaceState(null, '', location.pathname + location.search);
+            }));
+            return;
+          }
+
+          closeMenu();
+        });
+      });
+
+      /* Close on Escape, returning focus to the toggle for keyboard users */
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && isOpen()) {
+          closeMenu();
+          toggle.focus();
+        }
+      });
+
+      /* Safety net: if the viewport grows past the mobile breakpoint while
+         the menu is open (e.g. rotating a tablet, or resizing a desktop
+         browser window while testing), close it. The full-screen menu
+         styles are scoped to the same breakpoint in CSS, so without this
+         an open menu could otherwise be left in an inconsistent state
+         (body scroll still locked, toggle still showing "close"). */
+      const desktopQuery = window.matchMedia(MOBILE_QUERY);
+      const handleBreakpointChange = mq => {
+        if (!mq.matches && isOpen()) closeMenu();
+      };
+      if (desktopQuery.addEventListener) {
+        desktopQuery.addEventListener('change', () => handleBreakpointChange(desktopQuery));
+      } else if (desktopQuery.addListener) {
+        // Safari < 14 fallback
+        desktopQuery.addListener(() => handleBreakpointChange(desktopQuery));
+      }
+    })();
+  </script>
+
+  <script>
+    /* ── Projects dropdown: click-to-toggle ──────────────────────
+       Desktop reveal already works via CSS :hover/:focus-within; this
+       adds a click toggle for touch/keyboard users and is the only
+       mechanism on mobile, where the panel becomes an inline accordion. */
+    (function () {
+      document.querySelectorAll('.nav-item.has-dropdown').forEach(item => {
+        const btn = item.querySelector('.nav-dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const open = item.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded', String(open));
+        });
+      });
+
+      /* Close the panel when a link inside it is chosen. Matters for
+         same-page anchors ("All projects" -> #work on the homepage),
+         where without this the click-toggled state and :focus-within
+         would keep the panel pinned open over the section it jumped to. */
+      document.querySelectorAll('.nav-item.has-dropdown .nav-dropdown a').forEach(a => {
+        a.addEventListener('click', () => {
+          const item = a.closest('.nav-item.has-dropdown');
+          if (item) {
+            item.classList.remove('is-open');
+            const btn = item.querySelector('.nav-dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+          a.blur();
+        });
+      });
+
+      document.addEventListener('click', e => {
+        document.querySelectorAll('.nav-item.has-dropdown.is-open').forEach(item => {
+          if (!item.contains(e.target)) {
+            item.classList.remove('is-open');
+            const btn = item.querySelector('.nav-dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        document.querySelectorAll('.nav-item.has-dropdown.is-open').forEach(item => {
+          item.classList.remove('is-open');
+          const btn = item.querySelector('.nav-dropdown-toggle');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    /* ── Back to top: shows once scrolled past the hero ───────── */
+    (function () {
+      const btn = document.getElementById('back-to-top');
+      if (!btn) return;
+
+      // Appears once the hero has mostly scrolled out of view, rather
+      // than at a fixed pixel count — stays correct across phone/desktop
+      // viewport heights, and the hero itself is min-height: 100svh.
+      const showThreshold = () => window.innerHeight * 0.8;
+
+      const onScroll = () => {
+        btn.classList.toggle('is-visible', window.scrollY > showThreshold());
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      onScroll();
+
+      btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+
+  <!-- Portrait card 3D tilt (desktop / pointer-fine only) -->
+  <script>
+    (function () {
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+      const card = document.querySelector('.portrait-card-inner');
+      if (!card) return;
+
+      const MAX = 10; // max tilt degrees each axis
+
+      card.addEventListener('mousemove', function (e) {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left)  / r.width  - 0.5; // -0.5 → 0.5
+        const y = (e.clientY - r.top)   / r.height - 0.5;
+
+        const rotY =  x * MAX * 2;
+        const rotX = -y * MAX * 2;
+
+        // Fast during move, spring-back handled on leave
+        card.style.transition = 'transform 0.08s ease, box-shadow 0.12s ease';
+        card.style.transform  = 'perspective(900px) rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) scale3d(1.025,1.025,1.025)';
+
+        // Shadow shifts opposite to tilt — sells the physical lift
+        var sX = (-x * 22).toFixed(1);
+        var sY = ((-y + 0.25) * 44).toFixed(1);
+        card.style.boxShadow = sX + 'px ' + sY + 'px 64px rgba(0,0,0,0.22), 0 4px 20px rgba(0,0,0,0.10)';
+
+        // Glare follows cursor position
+        card.style.setProperty('--glare-x', Math.round((x + 0.5) * 100) + '%');
+        card.style.setProperty('--glare-y', Math.round((y + 0.5) * 100) + '%');
+        card.classList.add('is-tilted');
+      });
+
+      card.addEventListener('mouseleave', function () {
+        // Spring-back: slight overshoot then settle
+        card.style.transition = 'transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease';
+        card.style.transform  = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+        card.style.boxShadow  = '';
+        card.classList.remove('is-tilted');
+      });
+    })();
+  </script>
+
+</body>
+</html>

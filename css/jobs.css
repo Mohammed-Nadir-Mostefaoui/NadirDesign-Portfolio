@@ -1,0 +1,167 @@
+/* ============================================================
+   JOBS SITE — styles that do not exist on nadirdesign.com
+   ------------------------------------------------------------
+   Loaded after style.css on every page. style.css and
+   case-study.css stay untouched copies of the main site's, so a
+   fix made there can be copied across without merging anything.
+   Everything here uses the same tokens (tokens.css), so light and
+   dark mode follow automatically.
+   ============================================================ */
+
+/* ── Hero: the availability line ─────────────────────────────
+   Takes the slot of the main site's "founder of Nawat Studio"
+   credential. Same small caption tier (.hero-bio-sig), plus a status
+   dot, the one place on this page where green means something. */
+.hero-bio-sig.hero-open {
+  color: var(--text-secondary);
+}
+.hero-open-dot {
+  display: inline-block;
+  inline-size: 8px;
+  block-size: 8px;
+  margin-inline-end: 9px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+  /* optical: sits on the x-height, not the baseline */
+  transform: translateY(-1px);
+}
+
+/* ── At a glance ─────────────────────────────────────────────
+   One spec row between the hero and the work. Same gray card fill,
+   hairline and 20px radius as every other card on the page, so it
+   reads as part of the system and not as a banner. */
+.glance {
+  position: relative;
+  background-color: var(--bg-primary);
+  padding: 0 var(--container-pad);
+}
+.glance::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.13) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+[data-theme="dark"] .glance::before {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.10) 1px, transparent 1px);
+}
+.glance-grid {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.15fr 1.3fr 1fr 1fr;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.glance-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-inline-size: 0;
+  padding: clamp(18px, 2vw, 26px) clamp(18px, 2vw, 28px);
+  border-inline-start: 1px solid var(--border-default);
+}
+.glance-cell:first-child { border-inline-start: 0; }
+.glance-k,
+.glance-v,
+.glance-s { margin: 0; }
+.glance-k {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.glance-v {
+  font-size: clamp(16px, 1.45vw, 18.5px);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+.glance-s {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+/* Arabic script never carries Latin tracking or forced casing, and reads
+   small at these sizes (same rule the rest of the site follows). */
+[dir="rtl"] .glance-k { letter-spacing: 0; text-transform: none; font-size: 12.5px; }
+[dir="rtl"] .glance-s { font-size: 14px; }
+
+@media (max-width: 1024px) {
+  .glance-grid { grid-template-columns: 1fr 1fr; }
+  .glance-cell:nth-child(odd)  { border-inline-start: 0; }
+  .glance-cell:nth-child(n+3)  { border-block-start: 1px solid var(--border-default); }
+}
+@media (max-width: 560px) {
+  .glance-grid { grid-template-columns: 1fr; }
+  .glance-cell { border-inline-start: 0; }
+  .glance-cell + .glance-cell { border-block-start: 1px solid var(--border-default); }
+}
+
+/* ── How I work ──────────────────────────────────────────────
+   Reuses .services-section / .svc-card from style.css. Only the foot
+   differs: there is no duration or price here, just the link to the
+   case study that backs the card, under a hairline. */
+.how-card .svc-foot {
+  justify-content: flex-start;
+  padding-block-start: 16px;
+  border-block-start: 1px solid var(--border-default);
+}
+.how-card .svc-cta { margin-block-start: 0; }
+/* No "entry" card here (.svc-card--entry is not used): the three cards
+   are equals. They keep the shared hover from .svc-card. */
+
+.how-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 1.8vw, 24px);
+}
+.how-note { align-items: flex-start; }
+.how-note .svc-partner-text { flex: 1 1 auto; }
+@media (max-width: 900px) {
+  .how-notes { grid-template-columns: 1fr; }
+}
+
+/* ── Footer: the line that points to the freelance site ──────
+   The footer is always dark and redefines the text tokens locally,
+   so these resolve correctly in both themes. */
+.footer-bottom {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.footer-freelance {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+.footer-freelance a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-block-end: 1px solid var(--border-default);
+  padding-block-end: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.footer-freelance a:hover,
+.footer-freelance a:focus-visible {
+  color: var(--text-primary);
+  border-block-end-color: currentColor;
+}
+[dir="rtl"] .footer-freelance { font-size: 14px; }
+
+/* ── Case studies: the closing block has two actions here ──── */
+.cs-closing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
