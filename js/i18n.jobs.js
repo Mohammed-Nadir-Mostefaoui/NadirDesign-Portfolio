@@ -39,8 +39,8 @@ window.__JOBS_I18N__ = {
       cta_cv:        'View CV',
       stat2_num:     '2+',
       stat2_label:   'Years in\nproduct design',
-      stat3_num:     '05',
-      stat3_label:   'ERP modules\ndesigned'
+      stat3_num:     '03',
+      stat3_label:   'Regions\nexperience'
     },
     glance: {
       aria: 'At a glance',
@@ -191,8 +191,8 @@ window.__JOBS_I18N__ = {
       cta_cv:        'Voir le CV',
       stat2_num:     '2+',
       stat2_label:   'Ans en\ndesign produit',
-      stat3_num:     '05',
-      stat3_label:   'Modules ERP\nconçus'
+      stat3_num:     '03',
+      stat3_label:   "Régions\nd'expérience"
     },
     glance: {
       aria: 'En bref',
@@ -344,8 +344,8 @@ window.__JOBS_I18N__ = {
       cta_cv:        'عرض السيرة الذاتية',
       stat2_num:     '+2',
       stat2_label:   'سنوات في\nتصميم المنتجات',
-      stat3_num:     '05',
-      stat3_label:   'وحدات ERP\nصمّمتها'
+      stat3_num:     '03',
+      stat3_label:   'مناطق\nعملت فيها'
     },
     glance: {
       aria: 'لمحة سريعة',
