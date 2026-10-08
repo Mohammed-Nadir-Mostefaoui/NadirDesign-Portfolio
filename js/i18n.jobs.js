@@ -37,8 +37,8 @@ window.__JOBS_I18N__ = {
       bio:           'I design B2B software with the people who build it: ERP modules, dashboards, internal tools, and the design systems underneath. Since 2024 I have been the only designer on a live ERP platform, working daily with business analysts, tech leads and developers.<span class="hero-bio-sig hero-open"><span class="hero-open-dot" aria-hidden="true"></span>Open to a remote product design role. Based in Tlemcen, Algeria (UTC+1).</span>',
       cta_primary:   'See my work',
       cta_cv:        'View CV',
-      stat2_num:     '2+',
-      stat2_label:   'Years in\nproduct design',
+      stat2_num:     '390+',
+      stat2_label:   'Screens in\none product',
       stat3_num:     '03',
       stat3_label:   'Regions\nexperience'
     },
@@ -189,8 +189,8 @@ window.__JOBS_I18N__ = {
       bio:           'Je conçois des logiciels B2B avec celles et ceux qui les construisent : modules ERP, tableaux de bord, outils internes, et les design systems qui les soutiennent. Depuis 2024, je suis le seul designer d\'une plateforme ERP en production, au quotidien avec des business analysts, des tech leads et des développeurs.<span class="hero-bio-sig hero-open"><span class="hero-open-dot" aria-hidden="true"></span>Ouvert à un poste de designer produit à distance. Basé à Tlemcen, Algérie (UTC+1).</span>',
       cta_primary:   'Voir mon travail',
       cta_cv:        'Voir le CV',
-      stat2_num:     '2+',
-      stat2_label:   'Ans en\ndesign produit',
+      stat2_num:     '390+',
+      stat2_label:   'Écrans dans\nun produit',
       stat3_num:     '03',
       stat3_label:   "Régions\nd'expérience"
     },
@@ -342,8 +342,8 @@ window.__JOBS_I18N__ = {
       bio:           'أصمّم برمجيات B2B مع من يبنونها: وحدات ERP ولوحات معلومات وأدوات داخلية، وأنظمة التصميم التي تقوم عليها. منذ 2024 وأنا المصمم الوحيد على منصة ERP قيد التشغيل، أعمل يوميًا مع محللي الأعمال والقادة التقنيين والمطورين.<span class="hero-bio-sig hero-open"><span class="hero-open-dot" aria-hidden="true"></span>منفتح على وظيفة تصميم منتجات عن بُعد. أقيم في تلمسان، الجزائر (UTC+1).</span>',
       cta_primary:   'شاهد أعمالي',
       cta_cv:        'عرض السيرة الذاتية',
-      stat2_num:     '+2',
-      stat2_label:   'سنوات في\nتصميم المنتجات',
+      stat2_num:     '+390',
+      stat2_label:   'شاشة في\nمنتج واحد',
       stat3_num:     '03',
       stat3_label:   'مناطق\nعملت فيها'
     },
