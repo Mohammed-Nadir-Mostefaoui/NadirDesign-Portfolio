@@ -75,9 +75,6 @@
 </head>
 <body>
 
-  <!-- Custom cursor (desktop only) -->
-  <div id="cursor-dot"  aria-hidden="true"></div>
-  <div id="cursor-ring" aria-hidden="true"></div>
 
   <!-- ══════════════════════ NAVBAR ══════════════════════ -->
   <header>
@@ -798,37 +795,12 @@
   <script src="../js/i18n.jobs.js"></script>
   <script src="../js/i18n.js"></script>
   <script src="../js/footer.js"></script>
+  <script src="../js/cursor.js"></script>
   <script src="../js/cv.js"></script>
   <script src="../js/case-study.js"></script>
 
-  <!-- Subpage chrome: cursor, navbar, back-to-top -->
+  <!-- Subpage chrome: navbar, back-to-top -->
   <script>
-    /* Custom cursor */
-    (function () {
-      if (!window.matchMedia('(pointer: fine)').matches) return;
-      const dot = document.getElementById('cursor-dot');
-      const ring = document.getElementById('cursor-ring');
-      if (!dot || !ring) return;
-      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, shown = false;
-      const SPRING = 0.10;
-      document.addEventListener('mousemove', e => {
-        mouseX = e.clientX; mouseY = e.clientY;
-        if (!shown) { shown = true; dot.classList.add('cur-visible'); ring.classList.add('cur-visible'); }
-        dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
-      }, { passive: true });
-      (function animate() {
-        ringX += (mouseX - ringX) * SPRING; ringY += (mouseY - ringY) * SPRING;
-        ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
-        requestAnimationFrame(animate);
-      })();
-      document.querySelectorAll('a, button, [role="button"]').forEach(el => {
-        el.addEventListener('mouseenter', () => { dot.classList.add('cur-hover'); ring.classList.add('cur-hover'); });
-        el.addEventListener('mouseleave', () => { dot.classList.remove('cur-hover'); ring.classList.remove('cur-hover'); });
-      });
-      document.addEventListener('mouseleave', () => { dot.classList.remove('cur-visible'); ring.classList.remove('cur-visible'); });
-      document.addEventListener('mouseenter', () => { if (shown) { dot.classList.add('cur-visible'); ring.classList.add('cur-visible'); } });
-    })();
-
     /* Navbar: compact on scroll + mobile menu (logo navigates home normally) */
     (function () {
       const navbar = document.getElementById('navbar');

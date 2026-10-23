@@ -150,9 +150,8 @@
 </head>
 <body class="hero-pending">
 
-  <!-- Custom cursor (desktop only) -->
-  <div id="cursor-dot"  aria-hidden="true"></div>
-  <div id="cursor-ring" aria-hidden="true"></div>
+  <!-- The light table: the dot grid the whole page sits on (css §1) -->
+  <div class="page-field" aria-hidden="true"><span class="pf-grid"></span></div>
 
   <!-- ══════════════════════
        NAVBAR
@@ -432,6 +431,8 @@ experience</span>
          WORK / CASE STUDIES SECTION
     ══════════════════════════════════════════════ -->
     <section id="work" class="work-section" aria-labelledby="work-title">
+      <!-- A dimension line measuring the column it sits above. -->
+      <span class="pf-frag pf-band pf-dim pf-at-work-top" aria-hidden="true"><i class="pf-dim-line"></i><em class="pf-mono">--container-max</em><i class="pf-dim-line"></i></span>
       <div class="work-container">
 
         <div class="exp-header">
@@ -743,6 +744,7 @@ experience</span>
          from the case study its card links to. Do not add a claim here that a case study cannot back.
     ══════════════════════════════════════════════ -->
     <section id="how" class="services-section how-section" aria-labelledby="how-title">
+      <span class="pf-frag pf-band pf-rail pf-at-how-top" aria-hidden="true"><span class="pf-rail-line"><b></b><b></b><b class="is-on"></b><b></b><b></b></span></span>
       <div class="services-container">
 
         <div class="exp-header">
@@ -761,6 +763,7 @@ experience</span>
             <div class="svc-top">
               <span class="svc-idx" aria-hidden="true">01</span>
             </div>
+            <div class="svc-figure" aria-hidden="true"><svg viewBox="0 0 240 92" xmlns="http://www.w3.org/2000/svg"><rect class="sf-ink" x="6" y="8" width="54" height="76" rx="4"/><rect class="sf-bar--s" x="14" y="17" width="30" height="5" rx="2.5"/><rect class="sf-bar" x="14" y="29" width="38" height="3" rx="1.5"/><rect class="sf-bar" x="14" y="36" width="30" height="3" rx="1.5"/><rect class="sf-bar" x="14" y="43" width="35" height="3" rx="1.5"/><rect class="sf-mark" x="10" y="52" width="46" height="16" rx="2" stroke-dasharray="3 2"/><rect class="sf-bar--s" x="14" y="58" width="26" height="3" rx="1.5"/><rect class="sf-bar" x="14" y="74" width="22" height="3" rx="1.5"/><path class="sf-rule" d="M66 46h16M78 42l4 4-4 4"/><rect class="sf-ink" x="88" y="34" width="34" height="24" rx="4"/><rect class="sf-bar" x="96" y="44" width="18" height="4" rx="2"/><path class="sf-rule" d="M122 46h12"/><path class="sf-ink" d="M148 32l14 14-14 14-14-14z"/><path class="sf-rule" d="M148 32V24h30M148 60v10h30"/><rect class="sf-ink" x="178" y="12" width="56" height="24" rx="4"/><rect class="sf-blue" x="186" y="21" width="26" height="6" rx="3"/><rect class="sf-ink" x="178" y="58" width="56" height="24" rx="4" stroke-dasharray="4 3"/><rect class="sf-bar" x="186" y="68" width="20" height="4" rx="2"/></svg></div>
             <h3 class="svc-title" data-i18n="how.c1_title">With product and business</h3>
             <p class="svc-promise" data-i18n="how.c1_promise">Business rules first, screens second.</p>
             <ul class="svc-list">
@@ -777,6 +780,7 @@ experience</span>
             <div class="svc-top">
               <span class="svc-idx" aria-hidden="true">02</span>
             </div>
+            <div class="svc-figure" aria-hidden="true"><svg viewBox="0 0 240 92" xmlns="http://www.w3.org/2000/svg"><path class="sf-mark" d="M10 8v8M106 8v8M10 12h96"/><rect class="sf-ink" x="10" y="22" width="96" height="18" rx="4"/><rect class="sf-bar" x="20" y="29" width="42" height="4" rx="2"/><rect class="sf-blue" x="10" y="46" width="96" height="18" rx="4"/><rect class="sf-ink" x="10" y="70" width="96" height="18" rx="4" stroke-dasharray="4 3"/><rect class="sf-bar" x="20" y="77" width="28" height="4" rx="2"/><path class="sf-rule" d="M106 55h24"/><circle class="sf-blue" cx="106" cy="55" r="3"/><rect class="sf-ink" x="130" y="22" width="104" height="48" rx="4"/><rect class="sf-bar--s" x="140" y="31" width="52" height="4" rx="2"/><rect class="sf-bar" x="140" y="41" width="82" height="3" rx="1.5"/><rect class="sf-bar" x="140" y="48" width="66" height="3" rx="1.5"/><rect class="sf-bar" x="140" y="55" width="74" height="3" rx="1.5"/><circle class="sf-bar--s" cx="140" cy="80" r="5"/><circle class="sf-ink" cx="154" cy="80" r="5"/><rect class="sf-bar" x="166" y="78" width="30" height="4" rx="2"/></svg></div>
             <h3 class="svc-title" data-i18n="how.c2_title">With engineers</h3>
             <p class="svc-promise" data-i18n="how.c2_promise">A spec is a conversation, not a handoff.</p>
             <ul class="svc-list">
@@ -793,6 +797,7 @@ experience</span>
             <div class="svc-top">
               <span class="svc-idx" aria-hidden="true">03</span>
             </div>
+            <div class="svc-figure" aria-hidden="true"><svg viewBox="0 0 240 92" xmlns="http://www.w3.org/2000/svg"><rect class="sf-ink" x="8" y="6" width="68" height="36" rx="4"/><circle class="sf-bar--s" cx="26" cy="24" r="7"/><rect class="sf-bar" x="40" y="21" width="26" height="6" rx="3"/><rect class="sf-ink" x="86" y="6" width="68" height="36" rx="4"/><rect class="sf-bar" x="96" y="16" width="44" height="4" rx="2"/><rect class="sf-bar" x="96" y="25" width="30" height="4" rx="2"/><rect class="sf-ink" x="164" y="6" width="68" height="36" rx="4"/><rect class="sf-blue" x="176" y="18" width="34" height="12" rx="6"/><rect class="sf-ink" x="8" y="50" width="68" height="36" rx="4"/><rect class="sf-bar" x="18" y="60" width="48" height="4" rx="2"/><rect class="sf-bar" x="18" y="69" width="36" height="4" rx="2"/><rect class="sf-mark" x="86" y="50" width="68" height="36" rx="4"/><rect class="sf-bar--s" x="96" y="63" width="22" height="10" rx="5"/><circle class="sf-bar--s" cx="138" cy="68" r="5"/><rect class="sf-ink" x="164" y="50" width="68" height="36" rx="4" stroke-dasharray="4 3"/><path class="sf-rule" d="M154 68h10"/><path class="sf-blue" d="M146 76l5.3 14 2-6 6-2z"/><path class="sf-bar--s" d="M200 28l5.3 14 2-6 6-2z"/></svg></div>
             <h3 class="svc-title" data-i18n="how.c3_title">With other designers</h3>
             <p class="svc-promise" data-i18n="how.c3_promise">A system someone else can pick up and use.</p>
             <ul class="svc-list">
@@ -833,6 +838,7 @@ experience</span>
          EXPERIENCE SECTION
     ══════════════════════════════════════════════ -->
     <section id="experience" class="exp-section">
+      <span class="pf-frag pf-band pf-ruler pf-at-exp-top" aria-hidden="true"></span>
       <div class="exp-container">
 
         <div class="exp-header">
@@ -852,7 +858,7 @@ experience</span>
                Wording mirrors the Master CV. Closed by default on this site:
                the Datamaster entry below is the one a hiring manager needs
                open, since it is the day-to-day product-team role. -->
-          <div class="expa-item" id="expa-nawat" role="listitem">
+          <div class="expa-item" id="expa-nawat" role="listitem" data-from="2026-01" data-to="now">
             <button class="expa-trigger" aria-expanded="false" aria-controls="expa-nawat-body">
               <span class="expa-num" aria-hidden="true">01</span>
               <span class="expa-meta">
@@ -895,7 +901,7 @@ experience</span>
           </div>
 
           <!-- ── A2: Datamaster Analytics ── open by default (see A1). -->
-          <div class="expa-item expa-item--open" id="expa-dma" role="listitem">
+          <div class="expa-item expa-item--open" id="expa-dma" role="listitem" data-from="2024-09" data-to="now">
             <button class="expa-trigger" aria-expanded="true" aria-controls="expa-dma-body">
               <span class="expa-num" aria-hidden="true">02</span>
               <span class="expa-meta">
@@ -964,7 +970,7 @@ experience</span>
           </div>
 
           <!-- ── A3: Five Angles ── -->
-          <div class="expa-item" id="expa-five" role="listitem">
+          <div class="expa-item" id="expa-five" role="listitem" data-from="2024-03" data-to="2024-12">
             <button class="expa-trigger" aria-expanded="false" aria-controls="expa-five-body">
               <span class="expa-num" aria-hidden="true">03</span>
               <span class="expa-meta">
@@ -1007,7 +1013,7 @@ experience</span>
           </div>
 
           <!-- ── A4: SARL GLD ── -->
-          <div class="expa-item" id="expa-gld" role="listitem">
+          <div class="expa-item" id="expa-gld" role="listitem" data-from="2024-07" data-to="2024-07">
             <button class="expa-trigger" aria-expanded="false" aria-controls="expa-gld-body">
               <span class="expa-num" aria-hidden="true">04</span>
               <span class="expa-meta">
@@ -1047,7 +1053,7 @@ experience</span>
           </div>
 
           <!-- ── A5: Atqin ── -->
-          <div class="expa-item" id="expa-atqin" role="listitem">
+          <div class="expa-item" id="expa-atqin" role="listitem" data-from="2023-06" data-to="now">
             <button class="expa-trigger" aria-expanded="false" aria-controls="expa-atqin-body">
               <span class="expa-num" aria-hidden="true">05</span>
               <span class="expa-meta">
@@ -1095,6 +1101,7 @@ experience</span>
          SKILLS SECTION
     ══════════════════════════════════════════════ -->
     <section id="skills" class="skills-section" aria-labelledby="skills-title">
+      <span class="pf-frag pf-guide pf-at-skills-top" aria-hidden="true"><em class="pf-mono">baseline · 8</em></span>
       <div class="skills-container">
 
         <div class="exp-header">
@@ -1487,7 +1494,9 @@ experience</span>
   <script src="js/experience.js"></script>
   <script src="js/work.js"></script>
   <script src="js/skills.js"></script>
+  <script src="js/field.js"></script>
   <script src="js/footer.js"></script>
+  <script src="js/cursor.js"></script>
   <script src="js/cv.js"></script>
   <script>
     /* Hero scroll cue — fade out once the visitor starts scrolling */
@@ -1549,68 +1558,6 @@ experience</span>
     })();
   </script>
 
-  <script>
-    /* ── Custom cursor ───────────────────────────────────────── */
-    (function () {
-      if (!window.matchMedia('(pointer: fine)').matches) return;
-
-      const dot  = document.getElementById('cursor-dot');
-      const ring = document.getElementById('cursor-ring');
-      if (!dot || !ring) return;
-
-      let mouseX = 0, mouseY = 0;
-      let ringX  = 0, ringY  = 0;
-      let shown  = false;
-      const SPRING = 0.10;
-
-      document.addEventListener('mousemove', e => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-
-        if (!shown) {
-          shown = true;
-          dot.classList.add('cur-visible');
-          ring.classList.add('cur-visible');
-        }
-
-        dot.style.left = mouseX + 'px';
-        dot.style.top  = mouseY + 'px';
-      }, { passive: true });
-
-      /* Ring spring lag */
-      (function animate() {
-        ringX += (mouseX - ringX) * SPRING;
-        ringY += (mouseY - ringY) * SPRING;
-        ring.style.left = ringX + 'px';
-        ring.style.top  = ringY + 'px';
-        requestAnimationFrame(animate);
-      })();
-
-      /* Hover state */
-      document.querySelectorAll('a, button, [role="button"]').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          dot.classList.add('cur-hover');
-          ring.classList.add('cur-hover');
-        });
-        el.addEventListener('mouseleave', () => {
-          dot.classList.remove('cur-hover');
-          ring.classList.remove('cur-hover');
-        });
-      });
-
-      /* Hide on window leave */
-      document.addEventListener('mouseleave', () => {
-        dot.classList.remove('cur-visible');
-        ring.classList.remove('cur-visible');
-      });
-      document.addEventListener('mouseenter', () => {
-        if (shown) {
-          dot.classList.add('cur-visible');
-          ring.classList.add('cur-visible');
-        }
-      });
-    })();
-  </script>
 
   <script>
     /* ── Navbar: compact on scroll + mobile menu ─────────────── */

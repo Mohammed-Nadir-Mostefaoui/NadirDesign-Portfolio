@@ -22,14 +22,7 @@
 
   cards.forEach((card) => observer.observe(card));
 
-  /* Cursor-following spotlight glow — fine-pointer devices only. */
-  if (window.matchMedia('(pointer: fine)').matches) {
-    cards.forEach((card) => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty('--sk-x', (e.clientX - rect.left) + 'px');
-        card.style.setProperty('--sk-y', (e.clientY - rect.top) + 'px');
-      });
-    });
-  }
+  /* The cursor spotlight used to live here. It is now one shared
+     implementation in js/field.js, which lights every card type
+     (.work-panels, .svc-card, .skill-card) from one place. */
 })();

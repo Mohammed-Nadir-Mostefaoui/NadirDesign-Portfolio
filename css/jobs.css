@@ -165,3 +165,27 @@
   justify-content: center;
   gap: 12px;
 }
+
+/* ── The light table on this page ────────────────────────────
+   style.css carries the whole system (page field, annotations,
+   selection, section numbers, experience timeline, cursor). Only
+   two things here differ from nadirdesign.com:
+
+   1. The at-a-glance strip is a jobs-only section, so style.css
+      does not know to make it transparent. It used to paint its
+      own dot grid; the page field now draws one grid under the
+      whole page, so the strip's copy would double it.
+   2. The phase rail sits over How I work here (the main site puts
+      it over the studio, which this page does not have). Same
+      offset as there, so it lands in the same spot in the band. */
+.glance { background-color: transparent; }
+.glance::before { content: none; }
+
+.pf-at-how-top { inset-block-start: 36px; }
+
+/* The How I work cards carry no chip, and their number now sits on
+   the card's border (style.css §7), so the row that used to hold
+   both is empty. Fold it to zero height rather than leave a 38px gap
+   above the figure. Not display: contents: the row is the number's
+   positioning box, and the number has to stay where it is. */
+.how-card .svc-top { min-block-size: 0; block-size: 0; margin-block-end: 0; }

@@ -43,6 +43,22 @@
           og:    'How I structured fragmented professional-sales data into one readable ERP module, 4 end-to-end flows validated across 9 versions.'
         }
       },
+      cursor: {
+        you: 'You',
+        new_tab: 'Opens in a new tab',
+        email: 'Opens your email app',
+        whatsapp: 'Opens WhatsApp',
+        lights_off: 'Lights off',
+        lights_on: 'Lights on',
+        top: 'Back to the top',
+        cv: 'Read it here, or download it',
+        me: 'That\'s me',
+        regions: 'Algeria · France · UAE',
+        preview: 'Show it here',
+        details_show: 'Show details',
+        details_hide: 'Hide details',
+        send: 'Lands in my inbox',
+      },
       nav: {
         projects:   'Projects',
         services:   'Services',
@@ -156,6 +172,7 @@
         label:    'TRACK RECORD',
         title:    'My Experience',
         subtitle: 'Over the years, I\'ve had the privilege to work with amazing teams and clients.',
+        now:      'now',
         tag_pd:   'Product Design',
         tag_ds:   'Design Systems',
         tag_lead: 'Leadership',
@@ -456,6 +473,22 @@
           og:    'Comment j\'ai structuré des données de vente fragmentées en un module ERP lisible, 4 flux de bout en bout validés sur 9 versions.'
         }
       },
+      cursor: {
+        you: 'Vous',
+        new_tab: 'S\'ouvre dans un nouvel onglet',
+        email: 'Ouvre votre messagerie',
+        whatsapp: 'Ouvre WhatsApp',
+        lights_off: 'Éteindre la lumière',
+        lights_on: 'Allumer la lumière',
+        top: 'Retour en haut',
+        cv: 'À lire ici, ou à télécharger',
+        me: 'C\'est moi',
+        regions: 'Algérie · France · Émirats',
+        preview: 'Afficher ici',
+        details_show: 'Voir le détail',
+        details_hide: 'Masquer le détail',
+        send: 'Arrive dans ma boîte mail',
+      },
       nav: {
         projects:   'Projets',
         services:   'Services',
@@ -563,6 +596,7 @@
         label:    'EXPÉRIENCE PROFESSIONNELLE',
         title:    'Mon Expérience',
         subtitle: 'Au fil des années, j\'ai eu le privilège de travailler avec des équipes et des clients formidables.',
+        now:      'aujourd\'hui',
         tag_pd:   'Design Produit',
         tag_ds:   'Systèmes de Design',
         tag_lead: 'Leadership',
@@ -863,6 +897,22 @@
           og:    'كيف نظّمتُ بيانات المبيعات المتفرقة في وحدة ERP واضحة، 4 مسارات متكاملة جرى التحقق منها عبر 9 إصدارات.'
         }
       },
+      cursor: {
+        you: 'أنت',
+        new_tab: 'يُفتح في علامة تبويب جديدة',
+        email: 'يفتح تطبيق البريد لديك',
+        whatsapp: 'يفتح واتساب',
+        lights_off: 'أطفئ النور',
+        lights_on: 'أشعل النور',
+        top: 'العودة إلى الأعلى',
+        cv: 'اقرأها هنا أو حمّلها',
+        me: 'هذا أنا',
+        regions: 'الجزائر · فرنسا · الإمارات',
+        preview: 'اعرضه هنا',
+        details_show: 'اعرض التفاصيل',
+        details_hide: 'أخفِ التفاصيل',
+        send: 'يصلني مباشرة إلى بريدي',
+      },
       nav: {
         projects:   'المشاريع',
         services:   'الخدمات',
@@ -970,6 +1020,7 @@
         label:    'الخبرة المهنية',
         title:    'تجربتي المهنية',
         subtitle: 'على مرّ السنين، أتيحت لي فرصة العمل مع فرق وعملاء رائعين.',
+        now:      'اليوم',
         tag_pd:   'تصميم المنتج',
         tag_ds:   'أنظمة التصميم',
         tag_lead: 'القيادة',

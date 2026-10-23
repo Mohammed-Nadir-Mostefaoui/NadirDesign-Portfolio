@@ -482,56 +482,73 @@ html {
 }
 
 /* ============================================================
-   CUSTOM CURSOR  (pointer: fine / mouse devices only)
-   mix-blend-mode: difference = auto-inverts on any bg, zero mode logic
+   CURSOR — a collaborator in the design file
+   ------------------------------------------------------------
+   The arrow is drawn by the operating system: a custom image set
+   with `cursor`, not a page element chasing the mouse. That is
+   what makes it impossible to lag. The previous dot-and-ring was
+   two elements moved by script, the ring covering only 10% of
+   the remaining distance each frame, and visitors read the
+   catch-up as the site being slow.
+
+   Two resolutions through image-set so it stays sharp on
+   Retina; the plain url() line first is the fallback for any
+   browser that does not take image-set in `cursor`, since an
+   unsupported declaration is simply dropped. Hotspot at the tip.
+
+   Every other cursor on the site — the hand on buttons, zoom-in
+   on case-study media, not-allowed on a disabled control, the
+   caret in form fields — had been silenced by the old
+   `cursor: none !important` and now works again as designed.
+
+   The tag that rides beside the arrow is js/cursor.js.
    ============================================================ */
-@media (pointer: fine) {
-  *, *::before, *::after { cursor: none !important; }
-  input, textarea, select { cursor: text !important; }
-
-  #cursor-dot {
-    position: fixed;
-    width: 5px; height: 5px;
-    background: #fff;
-    border-radius: 50%;
-    top: 0; left: 0;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 9998;
-    mix-blend-mode: difference;
-    opacity: 0;
-    transition: width  0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                height 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                opacity 0.3s ease;
+@media (hover: hover) and (pointer: fine) {
+  html {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 3.2 L10.6 20.6 L13.1 13.1 L20.6 10.6 Z' fill='%231D4ED8' stroke='%23FFFFFF' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, auto;
+    cursor: -webkit-image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 3.2 L10.6 20.6 L13.1 13.1 L20.6 10.6 Z' fill='%231D4ED8' stroke='%23FFFFFF' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/svg%3E") 1x, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M4 3.2 L10.6 20.6 L13.1 13.1 L20.6 10.6 Z' fill='%231D4ED8' stroke='%23FFFFFF' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/svg%3E") 2x) 4 3, auto;
+    cursor: image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 3.2 L10.6 20.6 L13.1 13.1 L20.6 10.6 Z' fill='%231D4ED8' stroke='%23FFFFFF' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/svg%3E") 1x, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M4 3.2 L10.6 20.6 L13.1 13.1 L20.6 10.6 Z' fill='%231D4ED8' stroke='%23FFFFFF' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/svg%3E") 2x) 4 3, auto;
   }
-  #cursor-ring {
+  input, textarea, [contenteditable="true"] { cursor: text; }
+
+  /* These three asked for `default` only to avoid a hand on
+     something that is not clickable. Inherit gives them the new
+     arrow instead of the system's, for the same reason. */
+  html .skill-tag,
+  html .cs-chip,
+  html .cs-live-media.is-empty { cursor: inherit; }
+
+  #cursor-tag {
     position: fixed;
-    width: 36px; height: 36px;
-    border: 1.5px solid #fff;
-    border-radius: 50%;
-    top: 0; left: 0;
-    transform: translate(-50%, -50%);
+    inset-block-start: 0;
+    left: 0;               /* physical on purpose: the arrow is not mirrored in RTL, so neither is its tag */
+    z-index: 10000;
+    padding: 3px 8px 4px;
+    /* The corner nearest the arrow stays sharp, like a collaborator's tag. */
+    border-radius: 2px 9px 9px 9px;
+    background: var(--accent-blue);
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(13, 13, 13, 0.18);
     pointer-events: none;
-    z-index: 9997;
-    mix-blend-mode: difference;
     opacity: 0;
-    transition: width  0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                opacity 0.3s ease;
+    will-change: transform;
   }
+  #cursor-tag.is-flip-x               { border-radius: 9px 2px 9px 9px; }
+  #cursor-tag.is-flip-y               { border-radius: 9px 9px 9px 2px; }
+  #cursor-tag.is-flip-x.is-flip-y     { border-radius: 9px 9px 2px 9px; }
+  #cursor-tag.is-on { opacity: 1; }
 
-  #cursor-dot.cur-visible  { opacity: 1; }
-  #cursor-ring.cur-visible { opacity: 1; }
-
-  /* Hover: dot grows into a filled circle, ring expands.
-     Resize width/height directly instead of transform:scale() — scaling a
-     5px element up stretches an already-rasterized bitmap and blurs the
-     edges. Resizing lets the browser redraw it crisply at 20px. */
-  #cursor-dot.cur-hover  { width: 20px; height: 20px; }
-  #cursor-ring.cur-hover { width: 56px; height: 56px; }
-
-  .hero-pending #cursor-dot,
-  .hero-pending #cursor-ring { opacity: 0 !important; }
+  .hero-pending #cursor-tag { opacity: 0 !important; }
+}
+/* Fading only the tag's appearance, never its movement: position
+   is set directly on every pointer move and is never animated. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  #cursor-tag { transition: opacity 120ms ease; }
 }
 
 /* ============================================================
@@ -540,19 +557,6 @@ html {
    Right column: portrait photo card
    ============================================================ */
 
-/* ── Dot grid texture — pure CSS, works in both modes ── */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(0,0,0,0.13) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
-  z-index: 0;
-}
-[data-theme="dark"] .hero::before {
-  background-image: radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px);
-}
 
 /* Lift hero content above the dot grid */
 .hero > * { position: relative; z-index: 1; }
@@ -1780,17 +1784,6 @@ html {
   position: relative;
   background-color: var(--bg-primary);
 }
-#insights::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.13) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
-}
-[data-theme="dark"] #insights::before {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.10) 1px, transparent 1px);
-}
 
 /* ============================================================
    EXPERIENCE SECTION
@@ -1803,18 +1796,6 @@ html {
   position: relative;
   background-color: var(--bg-primary);
   padding: clamp(80px, 12vw, 160px) var(--container-pad);
-}
-.exp-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.13) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
-  z-index: 0;
-}
-[data-theme="dark"] .exp-section::before {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.10) 1px, transparent 1px);
 }
 
 .exp-container {
@@ -2423,18 +2404,6 @@ main {
   background-color: var(--bg-primary);
   padding: clamp(80px, 12vw, 160px) var(--container-pad);
 }
-.work-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.13) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
-  z-index: 0;
-}
-[data-theme="dark"] .work-section::before {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.10) 1px, transparent 1px);
-}
 
 .work-container {
   position: relative;
@@ -2955,18 +2924,6 @@ main {
   background-color: var(--bg-primary);
   padding: clamp(80px, 12vw, 160px) var(--container-pad);
 }
-.services-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.13) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
-  z-index: 0;
-}
-[data-theme="dark"] .services-section::before {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.10) 1px, transparent 1px);
-}
 
 .services-container {
   position: relative;
@@ -2976,6 +2933,64 @@ main {
   display: flex;
   flex-direction: column;
   gap: clamp(36px, 4.5vw, 56px);
+}
+
+/* ── The opening offer: the free one-flow look ──
+   B&OS v5.1 §15 + §20. The free look is the opening offer, so it sits ABOVE the
+   three services rather than inside them, and its cap is stated in public: a cap
+   stated on the page is a cap that never has to be defended in a conversation.
+   Deliberately NOT a fourth card. A wide two-column band reads as an invitation
+   rather than a tier, and it carries the accent hairline that used to mark the
+   Product Audit card, because the entry point moved here. */
+.svc-look {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: clamp(22px, 3vw, 48px);
+  align-items: center;
+  padding: clamp(26px, 3vw, 40px);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-block-start: 2px solid var(--accent-blue);
+  border-radius: 20px;
+}
+.svc-look-text { min-inline-size: 0; }
+.svc-look-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-block-end: 12px;
+}
+.svc-look-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+/* Arabic script never carries Latin-style tracking or forced casing. */
+[dir="rtl"] .svc-look-label { letter-spacing: 0; text-transform: none; }
+.svc-look-title {
+  margin: 0 0 10px;
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+.svc-look-body {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.svc-look-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(16px, 2vw, 22px);
+}
+@media (max-width: 900px) {
+  .svc-look { grid-template-columns: 1fr; align-items: start; }
 }
 
 /* ── The three cards ── */
@@ -3256,18 +3271,6 @@ main {
   background-color: var(--bg-primary);
   padding: clamp(80px, 12vw, 160px) var(--container-pad);
 }
-.skills-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.13) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
-  z-index: 0;
-}
-[data-theme="dark"] .skills-section::before {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.10) 1px, transparent 1px);
-}
 
 .skills-container {
   position: relative;
@@ -3434,18 +3437,6 @@ main {
   position: relative;
   background-color: var(--bg-primary);
   padding: clamp(80px, 12vw, 160px) var(--container-pad);
-}
-.studio-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.13) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
-  z-index: 0;
-}
-[data-theme="dark"] .studio-section::before {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.10) 1px, transparent 1px);
 }
 
 .studio-container {
@@ -4525,3 +4516,751 @@ main {
   .scroll-cue__dot { animation: none; top: 50%; margin-top: -2px; }
   .scroll-cue { transition: opacity 0.3s ease; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   THE LIGHT TABLE                                   2026-10-16
+   ────────────────────────────────────────────────────────────
+   Landing page only. Every selector in this block is an
+   index.html class, so the three case studies and the shared
+   footer are untouched by construction, not by luck.
+
+   One idea runs through all of it: the page is a drafting sheet
+   under a light table. The field is the sheet. Cards are
+   specimens laid on it. Accent blue is the beam, and it only
+   ever falls on the one thing currently in focus — which is
+   rule 3 of the carousel language, promoted from the
+   illustrations to the page itself.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Depth scale ─────────────────────────────────────────────
+   Cards used to cast nothing until hover, so the lift came from
+   nowhere. They now rest with a shadow and deepen into the lift.
+   The inset top line is the sheet's own thickness: 1px of
+   highlight on the lit edge is what makes a card read as an
+   object rather than a rectangle of colour.                   */
+:root {
+  --card-edge:   inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --card-rest:   0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 26px -14px rgba(0, 0, 0, 0.14);
+  --card-lift:   0 2px 5px rgba(0, 0, 0, 0.05), 0 26px 52px -20px rgba(0, 0, 0, 0.22);
+  --lt-beam:     rgba(59, 130, 246, 0.10);
+  --lt-pool:     rgba(59, 130, 246, 0.07);
+  --field-ink:   rgba(0, 0, 0, 0.13);
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-theme="dark"] {
+  --card-edge:   inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  --card-rest:   0 1px 2px rgba(0, 0, 0, 0.30), 0 10px 26px -14px rgba(0, 0, 0, 0.55);
+  --card-lift:   0 2px 5px rgba(0, 0, 0, 0.35), 0 26px 52px -20px rgba(0, 0, 0, 0.75);
+  --lt-beam:     rgba(59, 130, 246, 0.14);
+  --lt-pool:     rgba(59, 130, 246, 0.10);
+  --field-ink:   rgba(255, 255, 255, 0.10);
+}
+
+/* ── 1. The field ────────────────────────────────────────────
+   One layer in place of the seven identical per-section dot
+   grids that used to be printed down the page. It spans the
+   whole document rather than the viewport, so it scrolls with
+   the page exactly as the old per-section grids did, and the
+   floating work below can be placed anywhere down its height.
+
+   The page background itself is unchanged: --bg-primary on
+   <body>, which the sections now let through instead of each
+   repainting it.                                              */
+body { position: relative; }
+
+.page-field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.pf-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--field-ink) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.hero,
+.work-section,
+.services-section,
+.studio-section,
+.exp-section,
+.skills-section,
+#insights { background-color: transparent; }
+
+/* ── 2. The drawings behind the page ─────────────────────────
+   Four annotations, one in the top band of each section it
+   belongs to: a dimension line over the work, the five phases
+   over the studio, a ruler over the experience, an alignment
+   guide over the skills.
+
+   They live in the section padding, a band 80 to 160px tall
+   that exists at every window width, and they are built in HTML
+   and CSS rather than SVG so they stretch to whatever the
+   content column currently is. Anchored to their section rather
+   than to a percentage of the page, so Arabic, French and
+   English — three different page heights — all place them in
+   the same spot relative to real content.
+
+   The side margins are deliberately left empty. Drawings were
+   tried there and taken out on review (23 Oct): the margin is
+   where the eye rests, and anything in it competes with the
+   content instead of annotating it.                          */
+
+/* Distance from the window edge to the edge of the text column,
+   at any width. Below 1200px the container runs out and the
+   section's own padding takes over, which is what the max()
+   picks up. Everything below is positioned against this, so the
+   whole system tracks the layout instead of guessing at it.  */
+:root {
+  --safe: max(var(--container-pad), calc((100vw - var(--container-max)) / 2));
+}
+
+.pf-frag {
+  position: absolute;
+  z-index: 0;
+  color: var(--text-primary);
+  opacity: 0.22;
+  pointer-events: none;
+}
+[data-theme="dark"] .pf-frag { opacity: 0.26; }
+/* .hero lifts every direct child to z-index 1; the drawings are
+   the exception, they belong under the content. */
+.hero > .pf-frag { position: absolute; z-index: 0; }
+
+.pf-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  /* Machine labels: token names, pixel values. Left to the page's
+     own direction Arabic reorders the leading dashes and
+     "--container-max" renders as "container-max--".
+
+     `plaintext` rather than `direction: ltr`, on purpose. Setting
+     direction here would also change how this element resolves its
+     OWN logical properties: inset-inline-start would start meaning
+     "left" inside an RTL page, and every label would sit on the
+     wrong side of its drawing. plaintext takes the base direction
+     from the first strong character in the text, which is Latin in
+     all of these, and leaves `direction` alone — so the text orders
+     correctly and the positioning still mirrors. */
+  unicode-bidi: plaintext;
+}
+[dir="rtl"] .pf-mono { letter-spacing: 0; }
+
+/* ── Band: spans the content column ────────────────────────── */
+.pf-band { inset-inline: var(--safe); }
+
+/* A dimension line measuring the column it sits above. */
+.pf-dim { display: flex; align-items: center; gap: 14px; }
+.pf-dim-line {
+  position: relative;
+  flex: 1;
+  block-size: 1px;
+  background: currentColor;
+}
+.pf-dim-line::after {
+  content: '';
+  position: absolute;
+  inset-block: -7px;
+  inline-size: 1px;
+  background: currentColor;
+}
+.pf-dim-line:first-child::after  { inset-inline-start: 0; }
+.pf-dim-line:last-child::after   { inset-inline-end: 0; }
+
+/* A ruler: minor ticks every 16px, major every 80, drawn as two
+   repeating gradients so it is exact at any column width. */
+.pf-ruler {
+  block-size: 16px;
+  border-block-end: 1px solid currentColor;
+  background-repeat: repeat-x;
+  background-position: bottom left;
+  background-image:
+    repeating-linear-gradient(to right, currentColor 0 1px, transparent 1px 80px),
+    repeating-linear-gradient(to right, currentColor 0 1px, transparent 1px 16px);
+  background-size: 80px 13px, 16px 6px;
+}
+/* A ruler measures from where reading starts. Left as-is the tick
+   phase would run from the left edge in Arabic too, so the major
+   marks would land at arbitrary distances from the origin and the
+   remainder would fall at the start of the line instead of its end. */
+[dir="rtl"] .pf-ruler {
+  background-position: bottom right;
+  background-image:
+    repeating-linear-gradient(to left, currentColor 0 1px, transparent 1px 80px),
+    repeating-linear-gradient(to left, currentColor 0 1px, transparent 1px 16px);
+}
+
+/* The five phases, spaced across the column. */
+.pf-rail { display: flex; flex-direction: column; gap: 10px; }
+.pf-rail-line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  block-size: 20px;
+}
+.pf-rail-line::before {
+  content: '';
+  position: absolute;
+  inset-inline: 10px;
+  block-size: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.pf-rail-line b {
+  position: relative;
+  inline-size: 18px;
+  block-size: 18px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  background: var(--bg-primary);
+}
+.pf-rail-line b.is-on {
+  border-color: transparent;
+  background: var(--accent-blue);
+}
+
+/* An alignment guide, edge to edge. */
+.pf-guide { inset-inline: 0; block-size: 0; border-block-start: 1px dashed var(--accent-blue); }
+.pf-guide .pf-mono {
+  position: absolute;
+  inset-block-start: 7px;
+  inset-inline-start: var(--safe);
+  color: var(--accent-blue);
+}
+
+/* ── Where each one sits ───────────────────────────────────── */
+/* Band drawings sit inside a section's top or bottom padding,
+   which is clamp(80px, 12vw, 160px) — so an offset in the 30s
+   is clear of the heading at every width. */
+/* One annotation per section, each in that section's top band.
+   The rail used to sit in the studio's BOTTOM band, which put it
+   about 95px above the experience ruler — two technical strips
+   stacked in the same gap, reading as clutter rather than as a
+   system. One per section gives the page a rhythm instead. */
+.pf-at-work-top     { inset-block-start: 34px; }
+.pf-at-studio-top   { inset-block-start: 36px; }
+.pf-at-exp-top      { inset-block-start: 32px; }
+.pf-at-skills-top   { inset-block-start: 40px; }
+
+/* ── Narrow windows ────────────────────────────────────────── */
+/* The rail needs width to make sense: five phases crushed into
+   320px read as a broken component, not a drawing. The three
+   that stretch cleanly stay. */
+@media (max-width: 760px) {
+  .pf-rail { display: none; }
+  .pf-frag { opacity: 0.16; }
+  .pf-ruler { block-size: 12px; background-size: 60px 10px, 12px 5px; }
+}
+
+/* ── 4. Edge and depth ───────────────────────────────────────  */
+.work-panels,
+.svc-card,
+.skill-card {
+  position: relative;
+  box-shadow: var(--card-edge), var(--card-rest);
+  transition: transform 300ms var(--ease-settle),
+              box-shadow 300ms ease,
+              border-color 300ms ease;
+}
+.svc-card:hover,
+.skill-card:hover,
+[data-theme="dark"] .svc-card:hover,
+[data-theme="dark"] .skill-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-edge), var(--card-lift);
+}
+/* The work panel is large and already carries the page's
+   heaviest content, so it lifts half as far. */
+.work-panels { box-shadow: var(--card-edge), var(--card-rest), var(--card-rest); }
+.work-panels:hover,
+[data-theme="dark"] .work-panels:hover {
+  box-shadow: var(--card-edge), var(--card-lift), var(--card-rest);
+}
+
+/* ── 5. The beam ─────────────────────────────────────────────
+   A single cursor-tracked light, shared by all three card types.
+   This used to exist only on the skills grid, with its own copy
+   of the mousemove handler; js/skills.js no longer carries one
+   and js/field.js drives every card from one place.           */
+.work-panels::before,
+.svc-card::before,
+.skill-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--lt-x, 50%) var(--lt-y, 50%),
+              var(--lt-beam), transparent 58%);
+  opacity: 0;
+  transition: opacity 400ms ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.work-panels:hover::before,
+.svc-card:hover::before,
+.skill-card:hover::before { opacity: 1; }
+
+/* Lift card content above the beam. .work-panel already carries
+   its own z-index:1, this covers the service cards. */
+.svc-card > * { position: relative; z-index: 1; }
+
+/* ── 7. The corner chip ──────────────────────────────────────
+   The sticker, made out of something the card already said
+   rather than something new. Two elements that were already
+   there get lifted to the corner and set a few degrees off
+   square, which is what reads as applied rather than printed:
+
+     .work-panel-tag   the project's domain (was a blue text row)
+     .svc-idx          the service's index  (was inline in the header)
+
+   No new copy, no new i18n keys and nothing invented — each
+   chip says exactly what that element already said, and the
+   card face loses a row in the bargain.
+
+   The lean flips with the script, so the Arabic chip tilts the
+   other way and the two are mirror images rather than twins. */
+.work-panels {
+  --panels-pad-b: 48px;
+  --panels-pad-i: 48px;
+  /* Was hidden to contain the ghost numeral. Nothing actually
+     reaches the edge (the numeral sits 38px inside the padding
+     box), and the chip has to overhang, so this is now visible.
+     Checked in a browser: no child paints outside the card. */
+  overflow: visible;
+}
+@media (max-width: 900px) {
+  .work-panels { --panels-pad-b: 28px; --panels-pad-i: 24px; }
+}
+
+.work-panel-tag,
+.svc-idx,
+.expa-num {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xs);
+  background-color: var(--bg-secondary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  /* The system mono stack, not a webfont. Machine labels are
+     already set this way in .cs-code, and four corner chips do
+     not justify loading a fifth face. */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  transform: rotate(-3.5deg);
+  transform-origin: center;
+}
+[dir="rtl"] .work-panel-tag,
+[dir="rtl"] .svc-idx,
+[dir="rtl"] .expa-num {
+  letter-spacing: 0;          /* Arabic never carries Latin tracking */
+  transform: rotate(3.5deg);
+}
+[data-theme="dark"] .work-panel-tag,
+[data-theme="dark"] .svc-idx,
+[data-theme="dark"] .expa-num { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+
+/* Offsets are measured off the panel's own padding, so the chip
+   stays pinned to the card's corner when the padding changes at
+   the 900px breakpoint. */
+.work-panel-tag {
+  inset-block-start:  calc((var(--panels-pad-b) + 11px) * -1);
+  inset-inline-start: calc((var(--panels-pad-i) - 24px) * -1);
+  color: var(--accent-blue);
+  border-color: rgba(29, 78, 216, 0.3);
+}
+/* The NDA line kept the end of this row; with the tag gone it
+   would have slid to the start. */
+.work-panel-top { justify-content: flex-end; }
+
+.svc-idx {
+  inset-block-start:  calc((clamp(22px, 2.4vw, 30px) + 11px) * -1);
+  inset-inline-start: calc((clamp(22px, 2.4vw, 30px) - 20px) * -1);
+  color: var(--text-tertiary);
+}
+/* Cards 02 and 03 carry no badge, so lifting the index out of
+   this row would have collapsed it and left their titles
+   sitting higher than card 01's. */
+.svc-top { min-block-size: 24px; }
+
+/* ── 8. The service figures ──────────────────────────────────
+   Three cards that used to be told apart only by reading them.
+   Each now carries one schematic, so Audit, Design and Design
+   System are distinguishable at a glance and before a word is
+   read:
+
+     01  a ranked issue list, the first one marked
+     02  a pipeline: sketch → wireframe → screen → handoff
+     03  three layers: tokens → components → documentation
+
+   Drawn, not illustrated. Every one is built from the same
+   primitives as the carousel library — hairline outlines, grey
+   bars standing in for text, one blue thing per drawing — in
+   the site's own tokens, so both themes come free and there is
+   no asset to export or let drift.
+
+   No text inside them, which is what lets the whole figure be
+   mirrored for RTL with a single transform instead of a
+   second, hand-drawn set.                                     */
+.svc-figure {
+  margin-block: 2px 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+[data-theme="dark"] .svc-figure { background-color: var(--bg-tertiary); }
+
+.svc-figure svg {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 240px;
+  block-size: auto;
+  color: var(--text-primary);
+}
+[dir="rtl"] .svc-figure svg { transform: scaleX(-1); }
+
+.sf-ink    { stroke: currentColor; fill: none; stroke-width: 1.25; opacity: 0.45; }
+.sf-rule   { stroke: currentColor; fill: none; stroke-width: 1;    opacity: 0.28; }
+.sf-bar    { fill: currentColor; opacity: 0.26; }
+.sf-bar--s { fill: currentColor; opacity: 0.45; }
+.sf-mark   { stroke: var(--accent-blue); fill: none; stroke-width: 1.25; }
+.sf-blue   { fill: var(--accent-blue); }
+
+/* The figure is decoration layered over the card's own beam, so
+   it needs the same lift the rest of the card content has. */
+.svc-figure { position: relative; z-index: 1; }
+
+/* ── 9. Selection on hover ───────────────────────────────────
+   The main cards answer the cursor the way a frame answers it in
+   Figma: a square selection box on the card's bounding box, a
+   handle at each corner, and the card's real size in a pill
+   underneath. Square on purpose, over rounded cards — that is
+   what a selection looks like, and it reads as "selected"
+   rather than as a second border.
+
+   Work panel and service cards only. The skill cards and the
+   experience rows clip their own overflow, so handles and the
+   size pill would be cut off; they keep their blue-border hover.
+
+   The element is built by js/field.js. It sits at z-index 0 so
+   the card's own content — the overhanging corner chip above
+   all — paints over the selection line instead of being crossed
+   by it. */
+:is(.work-panels, .svc-card) > .lt-sel {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 1px solid var(--accent-blue);
+  border-radius: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+.lt-sel i {
+  position: absolute;
+  inline-size: 7px;
+  block-size: 7px;
+  background: var(--bg-primary);
+  border: 1px solid var(--accent-blue);
+}
+.lt-sel i:nth-child(1) { inset-block-start: -4px; inset-inline-start: -4px; }
+.lt-sel i:nth-child(2) { inset-block-start: -4px; inset-inline-end:   -4px; }
+.lt-sel i:nth-child(3) { inset-block-end:   -4px; inset-inline-start: -4px; }
+.lt-sel i:nth-child(4) { inset-block-end:   -4px; inset-inline-end:   -4px; }
+.lt-sel b {
+  position: absolute;
+  inset-block-start: calc(100% + 8px);
+  inset-inline: 0;
+  inline-size: max-content;
+  margin-inline: auto;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--accent-blue);
+  color: #FFFFFF;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  /* Latin digits and a multiplication sign: same bidi treatment as
+     the other machine labels, so "300 × 440" never reorders. */
+  unicode-bidi: plaintext;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.work-panels, .svc-card):hover > .lt-sel { opacity: 1; }
+}
+/* Keyboard users get the same selection as they tab through a
+   card's links — on any device. */
+:is(.work-panels, .svc-card):has(:focus-visible) > .lt-sel { opacity: 1; }
+
+/* The hovered service card rises above its neighbours so its size
+   pill is never painted over by the row below it. */
+.svc-card:hover,
+.svc-card:has(:focus-visible) { z-index: 2; }
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.work-panels, .svc-card) > .lt-sel { transition: opacity 160ms ease; }
+}
+
+/* ── 10. The annotations draw themselves ─────────────────────
+   Each of the four band annotations sweeps in from the reading
+   side the first time its section scrolls into view: the
+   dimension line extends, the ruler's ticks appear in order,
+   the rail draws and its five phases pop in behind the sweep,
+   the guide runs across the window.
+
+   Every hidden state below is scoped to <html>.pf-draw-ready,
+   which js/field.js only adds when motion is allowed and the
+   observer exists, and it all sits inside a no-preference block.
+   Reduced motion, no JavaScript, or a script error: the
+   annotations are simply there, already drawn.
+
+   The finished clip keeps 40px of slack above and below, so the
+   dimension line's end ticks and the guide's label, which sit
+   outside their element's box, are never cut. */
+@media (prefers-reduced-motion: no-preference) {
+  .pf-draw-ready .pf-frag {
+    clip-path: inset(-40px 0 -40px 0);
+    transition: clip-path 1100ms var(--ease-settle);
+  }
+  .pf-draw-ready .pf-frag:not(.is-drawn)            { clip-path: inset(-40px 100% -40px 0); }
+  .pf-draw-ready[dir="rtl"] .pf-frag:not(.is-drawn) { clip-path: inset(-40px 0 -40px 100%); }
+
+  /* The rail's five phases pop in behind the sweep, in reading
+     order (flex order is DOM order, which already follows the
+     script). */
+  .pf-draw-ready .pf-rail-line b {
+    transition: transform 420ms var(--ease-settle), opacity 260ms ease;
+  }
+  .pf-draw-ready .pf-rail:not(.is-drawn) .pf-rail-line b { opacity: 0; transform: scale(0.4); }
+  .pf-draw-ready .pf-rail-line b:nth-child(1) { transition-delay: 80ms;  }
+  .pf-draw-ready .pf-rail-line b:nth-child(2) { transition-delay: 200ms; }
+  .pf-draw-ready .pf-rail-line b:nth-child(3) { transition-delay: 320ms; }
+  .pf-draw-ready .pf-rail-line b:nth-child(4) { transition-delay: 440ms; }
+  .pf-draw-ready .pf-rail-line b:nth-child(5) { transition-delay: 560ms; }
+}
+
+/* ── 11. The section numbers ─────────────────────────────────
+   The 01–05 index each section already carries in its small
+   label, set huge and in outline behind the section title —
+   the same treatment the work panel gives its own numeral.
+
+   Driven by the existing `sec` counter, not typed in: the label
+   row increments it, and this pseudo-element comes after the
+   label row in the document, so it always reads the current
+   section's number. Add or reorder a section and these follow.
+
+   z-index -1 drops it behind the header's own text but, because
+   the header is not a stacking context, keeps it inside the
+   section container — above the page's dot field, never under
+   it. Inside the content column by construction; the margins
+   stay empty. */
+.exp-header { position: relative; }
+.exp-header::after {
+  content: counter(sec, decimal-leading-zero);
+  position: absolute;
+  z-index: -1;
+  inset-block-start: 50%;
+  /* 0, not a negative optical nudge: in Arabic the nudge pushed the
+     trailing digit 9px past the column into the margin, and the
+     margins stay empty. */
+  inset-inline-start: 0;
+  translate: 0 -46%;
+  font-family: var(--font-latin);
+  font-size: clamp(120px, 15vw, 230px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--text-primary);
+  opacity: 0.09;
+  pointer-events: none;
+  user-select: none;
+}
+[data-theme="dark"] .exp-header::after { opacity: 0.12; }
+/* At 900px and below the header stacks, title over subtitle, which
+   puts the subtitle's body text straight through the numeral's
+   strokes. Outline over small text is noise, and the small index
+   in the label row still carries the number. */
+@media (max-width: 900px) {
+  .exp-header::after { content: none; }
+}
+
+/* ── 13. Experience: the shared timeline ─────────────────────
+   One thin bar per row on a single axis, from the earliest start
+   on the list to this month, built by js/experience.js from each
+   row's own data-from / data-to. Rows still running reach the
+   "now" edge and end in a dot. The open row's bar is accent blue.
+
+   The track starts where the company name starts and ends where the
+   row's end padding begins. Both insets are measured by the script
+   (--xp-lead, --xp-tail on .expa-list), so the bars stay aligned
+   with the text at any breakpoint and in either direction. Bars are
+   positioned with logical properties, so in Arabic time runs right
+   to left, the way the page reads. */
+.expa-trigger { position: relative; }
+
+.xp-tl {
+  position: absolute;
+  inset-block-end: 9px;
+  inset-inline-start: var(--xp-lead, 114px);
+  inset-inline-end: var(--xp-tail, 24px);
+  block-size: 3px;
+  pointer-events: none;
+}
+.xp-tl::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 1px;
+  block-size: 1px;
+  background: var(--border-default);
+}
+.xp-tl-bar {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--from) * 100%);
+  inline-size: max(4px, calc(var(--span) * 100%));
+  border-radius: 2px;
+  background: var(--text-tertiary);
+  opacity: 0.5;
+}
+.xp-tl-bar.is-ongoing::after {
+  content: '';
+  position: absolute;
+  inset-inline-end: -3px;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: inherit;
+}
+.expa-item:hover .xp-tl-bar   { opacity: 0.8; }
+.expa-item--open .xp-tl-bar   { background: var(--accent-blue); opacity: 1; }
+
+/* The axis sits on top of the list with the same insets, plus the
+   1px of each row's border it lives outside of. */
+.xp-axis {
+  position: relative;
+  block-size: 16px;
+  margin-inline-start: calc(var(--xp-lead, 114px) + 1px);
+  margin-inline-end: calc(var(--xp-tail, 24px) + 1px);
+  margin-block-end: -6px;
+  color: var(--text-tertiary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  line-height: 16px;
+}
+.xp-axis span {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: calc(var(--at) * 100%);
+  padding-inline-start: 5px;
+  border-inline-start: 1px solid var(--border-default);
+  white-space: nowrap;
+  unicode-bidi: plaintext;
+}
+.xp-axis .xp-axis-now {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  padding-inline: 0 5px;
+  border-inline-start: 0;
+  border-inline-end: 1px solid var(--border-default);
+  color: var(--accent-blue);
+  font-family: inherit;
+}
+[dir="rtl"] .xp-axis .xp-axis-now { font-family: var(--font-arabic); font-size: 11px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .xp-tl-bar { transition: background-color 240ms ease, opacity 240ms ease; }
+
+  /* Bars sweep in from the reading side the first time the list is
+     seen, row by row, gated exactly like the band annotations. */
+  .pf-draw-ready .xp-tl-bar {
+    clip-path: inset(-6px -6px);
+    transition: clip-path 900ms var(--ease-settle) var(--xp-delay, 0ms),
+                background-color 240ms ease, opacity 240ms ease;
+  }
+  .pf-draw-ready .xp-tl:not(.is-drawn) .xp-tl-bar            { clip-path: inset(-6px 100% -6px -6px); }
+  .pf-draw-ready[dir="rtl"] .xp-tl:not(.is-drawn) .xp-tl-bar { clip-path: inset(-6px -6px -6px 100%); }
+}
+
+/* ── 12. Experience: the number on the border ────────────────
+   Each row's 01–05 is lifted out of the row and onto its top
+   border as the same overhanging, 3.5°-off-square chip the service
+   cards carry — it joins their rule in section 7, so the two can
+   never drift apart. On hover and on the open row it takes the
+   accent, as the inline number always did.
+
+   With the number out of the row, the old 58px indent (16px
+   padding + 22px number + 20px gap), hard-coded in four places for
+   LTR, RTL and phone, has nothing left to clear. Everything now
+   starts at one inset, --xp-in, the same as the row's end padding.
+   The timeline measures where the company name starts, so it
+   follows on its own. */
+.expa-item {
+  --xp-in:  24px;
+  --xp-end: 24px;
+  /* Was hidden. The peek and the body each clip themselves; the
+     row's own clipping only stopped the chip from overhanging. */
+  overflow: visible;
+}
+@media (max-width: 640px) {
+  .expa-item { --xp-in: 16px; --xp-end: 16px; }
+}
+
+.expa-trigger { padding-inline-start: var(--xp-in); }
+
+.expa-peek,
+[dir="ltr"] .expa-peek,
+[dir="rtl"] .expa-peek {
+  padding-left: 0;
+  padding-right: 0;
+  padding-inline: var(--xp-in) var(--xp-end);
+}
+.expa-body-content,
+[dir="ltr"] .expa-body-content,
+[dir="rtl"] .expa-body-content {
+  padding: 8px 0 28px;
+  padding-inline: var(--xp-in) var(--xp-end);
+}
+@media (max-width: 640px) {
+  .expa-right,
+  [dir="rtl"] .expa-right { padding-left: 0; padding-right: 0; }
+}
+
+/* The chip itself. The trigger sits inside the row's 1px border,
+   so -12px puts the chip 11px over the edge, like the service cards. */
+.expa-num {
+  inset-block-start: -12px;
+  inset-inline-start: calc(var(--xp-in) - 6px);
+  min-width: 0;
+  color: var(--text-tertiary);
+}
+[dir="rtl"] .expa-num { font-size: 10.5px; }
+.expa-item--open .expa-num,
+.expa-item:hover .expa-num { border-color: rgba(29, 78, 216, 0.3); }
+
+/* Room for the chips: each one overhangs into the gap above its row,
+   and the first one sits under the timeline's year axis. */
+.expa-list { gap: 22px; }
+.xp-axis   { margin-block-end: 6px; }
