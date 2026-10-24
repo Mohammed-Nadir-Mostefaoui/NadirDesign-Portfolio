@@ -5264,3 +5264,54 @@ body { position: relative; }
    and the first one sits under the timeline's year axis. */
 .expa-list { gap: 22px; }
 .xp-axis   { margin-block-end: 6px; }
+
+/* ── Glossary terms on the case studies ──────────────────────
+   js/glossary.js marks the first technical term of each kind in
+   every section (ERP, design tokens, mid-fidelity...). A dotted
+   underline says "there is more here", the way a footnote does,
+   and hovering it opens the cursor tag into a short note with a
+   plain definition (js/cursor.js).
+
+   Fine pointers only: on touch there is no tag to read, so the
+   underline would promise something that never comes. */
+@media (hover: hover) and (pointer: fine) {
+  .gl-term {
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: color-mix(in srgb, var(--accent-blue) 60%, transparent);
+    text-underline-offset: 0.22em;
+    text-decoration-skip-ink: none;
+    border-radius: 3px;
+  }
+  .gl-term:hover {
+    background-color: color-mix(in srgb, var(--accent-blue) 10%, transparent);
+    text-decoration-style: solid;
+  }
+  /* Arabic sits lower on its line: the dots move down with it. */
+  [dir="rtl"] .gl-term { text-underline-offset: 0.42em; }
+
+  /* The tag as a note: wraps, at a comfortable measure. */
+  #cursor-tag.is-note {
+    white-space: normal;
+    inline-size: max-content;
+    max-inline-size: 300px;
+    padding: 8px 11px 9px;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: start;
+  }
+  #cursor-tag.is-note b {
+    display: block;
+    margin-block-end: 2px;
+    font-weight: 700;
+  }
+  #cursor-tag.is-note[dir="rtl"] {
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .gl-term { transition: background-color 140ms ease; }
+}
